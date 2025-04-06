@@ -1,98 +1,93 @@
-# Tho Gio - Website Thịt Heo Tươi Ngon
+# Thịt Heo Tươi - Tho Gio
 
-Website bán thịt heo chất lượng cao, hỗ trợ đặt hàng trực tuyến và giao hàng tận nơi.
+Website bán thịt heo tươi với đầy đủ các chức năng quản lý sản phẩm, giỏ hàng, đặt hàng và tìm kiếm.
 
-## Tính năng chính
+## Demo
 
-- Hiển thị danh sách sản phẩm thịt heo phân loại theo danh mục
-- Tìm kiếm và lọc sản phẩm theo nhiều tiêu chí
-- Trang thông tin chi tiết sản phẩm
-- Hiển thị bản đồ cửa hàng với Google Maps
-- Liên hệ qua form và qua các kênh mạng xã hội
-- Responsive design cho cả máy tính và điện thoại di động
-- Quản lý dữ liệu sản phẩm qua file Excel
+Live demo: [https://thitheo.vercel.app](https://thitheo.vercel.app)
+
+## Tính năng
+
+- Hiển thị danh sách sản phẩm và danh mục
+- Tìm kiếm sản phẩm
+- Giỏ hàng và thanh toán
+- Quản lý người dùng
+- Khuyến mãi và ưu đãi
+- Đáp ứng trên mọi thiết bị (Responsive design)
+- Dữ liệu được quản lý qua file Excel
 
 ## Công nghệ sử dụng
 
-- [Next.js](https://nextjs.org/) - React framework
-- [TypeScript](https://www.typescriptlang.org/) - JavaScript với kiểm tra kiểu dữ liệu
-- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
-- [React Icons](https://react-icons.github.io/react-icons/) - Thư viện icon
-- [@react-google-maps/api](https://www.npmjs.com/package/@react-google-maps/api) - Tích hợp Google Maps
-- [xlsx](https://www.npmjs.com/package/xlsx) - Đọc/ghi file Excel
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- React Hooks
+- Context API
+- Excel file integration
 
-## Cài đặt và chạy
+## Cài đặt và chạy dự án
 
-### Yêu cầu:
+1. **Clone repository:**
 
-- Node.js 16+ và npm
+   ```bash
+   git clone https://github.com/dangnv3112/thitheo.git
+   cd thitheo
+   ```
 
-### Các bước cài đặt:
+2. **Cài đặt dependencies:**
 
-1. Clone repository:
-```bash
-git clone https://github.com/username/tho-gio.git
-cd tho-gio
-```
+   ```bash
+   npm install
+   ```
 
-2. Cài đặt dependencies:
-```bash
-npm install
-```
+3. **Chạy phiên bản development:**
 
-3. Chạy server development:
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
 
-4. Mở trình duyệt và truy cập [http://localhost:3000](http://localhost:3000)
+   Truy cập [http://localhost:3000](http://localhost:3000) để xem website.
 
-### Để build cho production:
+4. **Build và chạy phiên bản production:**
 
-```bash
-npm run build
-npm start
-```
+   ```bash
+   npm run build
+   npm start
+   ```
 
-## Cấu trúc dự án
+## Quản lý dữ liệu
 
-```
-tho-gio/
-├── app/                   # Next.js App Router
-│   ├── components/        # React components
-│   ├── products/          # Products pages
-│   ├── contact/           # Contact page
-│   ├── about/             # About page
-│   ├── utils/             # Utility functions
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── public/                # Static assets
-│   ├── images/            # Images and icons
-│   └── data/              # Data files (Excel)
-└── ...                    # Other configuration files
-```
+Dữ liệu sản phẩm, danh mục và thông tin khác được quản lý qua file Excel trong thư mục `/public/data/tho-gio-data.xlsx`.
 
-## Quản lý dữ liệu với Excel
+Chi tiết về cách quản lý dữ liệu có thể xem trong file `/public/data/README.md`.
 
-Website hỗ trợ quản lý dữ liệu thông qua file Excel. Để cập nhật thông tin sản phẩm, danh mục, thông tin cửa hàng và thông tin công ty, bạn có thể:
+## Deploy lên Vercel
 
-1. Chỉnh sửa file Excel trong thư mục `/public/data/tho-gio-data.xlsx`
-2. File Excel cần có 4 sheet: "Products", "Categories", "StoreLocations", và "CompanyInfo"
-3. Mỗi sheet có cấu trúc cột riêng (xem hướng dẫn trong file `/public/data/README.md`)
+### Deploy tự động từ GitHub
 
-Website sẽ tự động đọc dữ liệu từ file Excel này và hiển thị thông tin mới nhất.
+1. Fork repository này
+2. Tạo tài khoản [Vercel](https://vercel.com/)
+3. Import GitHub repository
+4. Deploy
 
-## Google Maps API
+### Deploy thủ công
 
-Để sử dụng tính năng bản đồ, bạn cần thay thế API key Google Maps trong file `Map.tsx` với key của bạn:
+1. Cài đặt Vercel CLI:
 
-```typescript
-<LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-```
+   ```bash
+   npm i -g vercel
+   ```
 
-## Liên hệ
+2. Deploy:
 
-- Email: info@thogio.vn
-- Website: https://thogio.vn
-- Facebook: https://facebook.com/thogio
-- Zalo: https://zalo.me/thogio
+   ```bash
+   vercel
+   ```
+
+## Hỗ trợ
+
+Nếu có bất kỳ câu hỏi hoặc vấn đề, vui lòng tạo issue trong repository này.
+
+## License
+
+[MIT](LICENSE)
