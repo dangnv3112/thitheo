@@ -6,10 +6,12 @@ import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import { FaTrash, FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import { formatCurrency } from '../utils/format';
+import PaymentModal from '../components/PaymentModal';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   
   // Tránh hydration mismatch
   useEffect(() => {
@@ -19,6 +21,28 @@ export default function CartPage() {
   if (!mounted) {
     return null;
   }
+  
+  // Xử lý khi người dùng đặt hàng
+  const handleOrderSubmit = (orderData: any) => {
+    // Kết hợp thông tin đơn hàng với thông tin giỏ hàng
+    const completeOrder = {
+      ...orderData,
+      items: cart.items.map(item => ({
+        id: item.product.id,
+        name: item.product.name,
+        price: item.product.discountPrice || item.product.price,
+        quantity: item.quantity,
+        totalPrice: (item.product.discountPrice || item.product.price) * item.quantity
+      }))
+    };
+    
+    console.log('Order submitted:', completeOrder);
+    
+    // TODO: Gửi đơn hàng đến Google Sheets hoặc API
+    
+    // Xóa giỏ hàng sau khi đặt hàng thành công
+    clearCart();
+  };
   
   // Nếu giỏ hàng trống
   if (cart.items.length === 0) {
@@ -163,18 +187,26 @@ export default function CartPage() {
             </div>
             
             <button
+              onClick={() => setShowPaymentModal(true)}
               className="mt-6 w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 transition"
             >
-              Thanh Toán
+              Đặt Hàng
             </button>
             
             <div className="mt-4 text-sm text-gray-500">
-              <p>* Phương thức thanh toán sẽ được chọn ở bước tiếp theo</p>
               <p>* Giá đã bao gồm VAT</p>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal 
+        isOpen={showPaymentModal} 
+        onClose={() => setShowPaymentModal(false)} 
+        total={cart.total}
+        onSubmitOrder={handleOrderSubmit}
+      />
     </div>
   );
 } 
