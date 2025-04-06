@@ -147,7 +147,7 @@ export default function CategoryGrid() {
               </div>
             ) : (
               <img
-                src={category.image ? category.image.split('?')[0].replace('/thitheo', '') : `/images/categories/thitheotuoi.png`}
+                src={category.image || '/images/categories/product-placeholder.svg'}
                 alt={category.name}
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition duration-300"
                 onError={() => handleImageError(category.id)}

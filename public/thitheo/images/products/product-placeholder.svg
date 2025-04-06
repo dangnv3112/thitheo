@@ -1,0 +1,9 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#F5F5F5"/>
+  <path d="M200 120C188.954 120 180 128.954 180 140C180 151.046 188.954 160 200 160C211.046 160 220 151.046 220 140C220 128.954 211.046 120 200 120Z" fill="#D32F2F"/>
+  <path d="M185 135C186.657 135 188 133.657 188 132C188 130.343 186.657 129 185 129C183.343 129 182 130.343 182 132C182 133.657 183.343 135 185 135Z" fill="white"/>
+  <path d="M188 148C188 151.314 193.373 154 200 154C206.627 154 212 151.314 212 148H188Z" fill="white"/>
+  <path d="M215 135C216.657 135 218 133.657 218 132C218 130.343 216.657 129 215 129C213.343 129 212 130.343 212 132C212 133.657 213.343 135 215 135Z" fill="white"/>
+  <path d="M150 100H250V180H150V100Z" stroke="#CCCCCC" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="200" y="205" font-family="Arial" font-size="14" fill="#666666" text-anchor="middle">Hình ảnh sản phẩm</text>
+</svg> 

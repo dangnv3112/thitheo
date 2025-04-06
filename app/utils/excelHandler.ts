@@ -385,25 +385,19 @@ export async function loadExcelData(filePath: string) {
 export async function getProducts(): Promise<Product[]> {
   try {
     console.log('[Products] Fetching fresh products data from Excel');
-    // Thử tải dữ liệu với các đường dẫn có thể
-    let productsData = await loadExcelData('data/tho-gio-data.xlsx');
+    // Thử tải dữ liệu với đường dẫn tương đối trước
+    let productsData = await loadExcelData('/data/tho-gio-data.xlsx');
     
-    // Nếu không có sản phẩm, thử với các đường dẫn khác
+    // Nếu không có sản phẩm, thử với đường dẫn tuyệt đối
     if (productsData.products.length === 0) {
-      console.log('[Products] Trying with /data path');
-      productsData = await loadExcelData('/data/tho-gio-data.xlsx');
-    }
-    
-    // Nếu vẫn không có, thử với đường dẫn public
-    if (productsData.products.length === 0) {
-      console.log('[Products] Trying with public/data path');
-      productsData = await loadExcelData('public/data/tho-gio-data.xlsx');
-    }
-    
-    // Thử một lần cuối với đường dẫn tuyệt đối
-    if (productsData.products.length === 0) {
-      console.log('[Products] Trying with /public/data path');
+      console.log('[Products] Trying absolute path');
       productsData = await loadExcelData('/public/data/tho-gio-data.xlsx');
+    }
+    
+    // Nếu vẫn không có sản phẩm, thử với đường dẫn có /thitheo
+    if (productsData.products.length === 0) {
+      console.log('[Products] Trying with /thitheo path');
+      productsData = await loadExcelData('/thitheo/data/tho-gio-data.xlsx');
     }
     
     // Kiểm tra một lần nữa
@@ -459,6 +453,12 @@ export async function getCategories(): Promise<Category[]> {
     if (categoriesData.categories.length === 0) {
       console.log('[Categories] Trying absolute path');
       categoriesData = await loadExcelData('/public/data/tho-gio-data.xlsx');
+    }
+    
+    // Nếu vẫn không có danh mục, thử với đường dẫn có /thitheo
+    if (categoriesData.categories.length === 0) {
+      console.log('[Categories] Trying with /thitheo path');
+      categoriesData = await loadExcelData('/thitheo/data/tho-gio-data.xlsx');
     }
     
     // Kiểm tra một lần nữa

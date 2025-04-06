@@ -4,8 +4,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/thitheo',
-  assetPrefix: '/thitheo/',
+  // Đặt basePath chỉ trong môi trường production, trong development để trống
+  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo/' : '',
   trailingSlash: true,
   eslint: {
     // Bỏ qua lỗi ESLint trong quá trình build
