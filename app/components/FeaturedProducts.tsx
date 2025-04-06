@@ -184,13 +184,11 @@ export default function FeaturedProducts() {
                     <FaImage className="text-gray-400 text-5xl" />
                   </div>
                 ) : (
-                  <div className="relative w-full pb-[100%]">
-                    <Image
-                      src={product.image.split('?')[0]}
+                  <div className="relative w-full pb-[100%] overflow-hidden">
+                    <img
+                      src={product.image ? product.image.split('?')[0] : '/images/products/product-placeholder.svg'}
                       alt={product.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      className="object-cover rounded-t-lg"
+                      className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = '/images/products/product-placeholder.svg';

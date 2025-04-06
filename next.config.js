@@ -3,14 +3,9 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
   },
   basePath: '/thitheo',
+  assetPrefix: '/thitheo/',
   trailingSlash: true,
   eslint: {
     // Bỏ qua lỗi ESLint trong quá trình build
