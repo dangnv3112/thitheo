@@ -7,6 +7,7 @@ import { FaShoppingCart, FaImage } from 'react-icons/fa';
 import { getProducts, Product } from '../utils/excelHandler';
 import { useCart } from '../context/CartContext';
 import { formatCurrency } from '../utils/format';
+import { getProductImagePath } from '../utils/paths';
 
 // Fallback products khi không load được dữ liệu
 const fallbackProducts: Product[] = [
@@ -202,12 +203,12 @@ export default function FeaturedProducts() {
                 ) : (
                   <div className="relative w-full pb-[100%] overflow-hidden">
                     <img
-                      src={getImagePath(product.image)}
+                      src={getProductImagePath(product.image)}
                       alt={product.name}
                       className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/images/products/product-placeholder.svg';
+                        target.src = getProductImagePath('/images/products/product-placeholder.svg');
                       }}
                     />
                   </div>

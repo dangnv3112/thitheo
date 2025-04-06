@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaFacebook, FaPhone, FaMapMarkerAlt, FaRegClock } from 'react-icons/fa';
+import { FaFacebook, FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
 import { MdEmail } from 'react-icons/md';
+import { getCompanyInfo } from '../utils/excelHandler';
+import { getAssetPath } from '../utils/paths';
 
 export default function Footer() {
   return (
@@ -14,7 +16,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center mb-4">
               <div className="relative w-48 h-16">
                 <Image 
-                  src="/images/tho-gio-logo-white.svg" 
+                  src={getAssetPath('/images/tho-gio-logo-white.svg')} 
                   alt="Tho Giò Logo" 
                   fill 
                   className="object-contain"
@@ -96,7 +98,7 @@ export default function Footer() {
                 <a href="mailto:info@thogio.vn" className="hover:text-red-300">info@thogio.vn</a>
               </li>
               <li className="flex items-center">
-                <FaRegClock className="mr-2" />
+                <FaClock className="mr-2" />
                 <span>08:00 - 22:00 (Tất cả các ngày)</span>
               </li>
             </ul>

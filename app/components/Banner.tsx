@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { getAssetPath } from '../utils/paths';
 import Image from 'next/image';
 
 const banners = [

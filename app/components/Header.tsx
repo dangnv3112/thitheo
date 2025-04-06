@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FaShoppingCart, FaUserAlt, FaBars, FaTimes, FaSearch } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/navigation';
+import { getAssetPath } from '../utils/paths';
 
 // Interface for search result items
 interface SearchResult {
@@ -86,14 +87,11 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="relative w-48 h-16">
-              <Image 
-                src="/images/tho-gio-logo.svg" 
-                alt="Tho Giò Logo" 
-                fill 
-                className="object-contain"
-                priority
-                unoptimized={true}
+            <div className="relative h-12 w-32">
+              <img
+                src={getAssetPath('/images/tho-gio-logo.svg')}
+                alt="Tho Giò Logo"
+                className="h-full w-auto"
               />
             </div>
           </Link>
