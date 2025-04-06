@@ -114,6 +114,22 @@ export default function CategoryGrid() {
     }
   };
 
+  // Xử lý đường dẫn hình ảnh để hoạt động với basePath
+  const getImagePath = (path: string | undefined) => {
+    if (!path) return '/images/categories/product-placeholder.svg';
+    
+    // Loại bỏ tham số query nếu có
+    const cleanPath = path.split('?')[0];
+    
+    // Kiểm tra xem đường dẫn đã có /thitheo chưa
+    if (cleanPath.startsWith('/thitheo/')) {
+      return cleanPath;
+    }
+    
+    // Với môi trường development, trả về đường dẫn không có /thitheo
+    return cleanPath;
+  };
+
   // Hiển thị loading spinner khi chưa mount hoặc đang loading
   if (!mounted || (loading && categories.length === 0)) {
     return (
@@ -147,7 +163,7 @@ export default function CategoryGrid() {
               </div>
             ) : (
               <img
-                src={category.image || '/images/categories/product-placeholder.svg'}
+                src={getImagePath(category.image)}
                 alt={category.name}
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition duration-300"
                 onError={() => handleImageError(category.id)}

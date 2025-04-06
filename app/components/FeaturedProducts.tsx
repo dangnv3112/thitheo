@@ -151,6 +151,22 @@ export default function FeaturedProducts() {
     }
   };
 
+  // Xử lý đường dẫn hình ảnh để hoạt động với basePath
+  const getImagePath = (path: string | undefined) => {
+    if (!path) return '/images/products/product-placeholder.svg';
+    
+    // Loại bỏ tham số query nếu có
+    const cleanPath = path.split('?')[0];
+    
+    // Kiểm tra xem đường dẫn đã có /thitheo chưa
+    if (cleanPath.startsWith('/thitheo/')) {
+      return cleanPath;
+    }
+    
+    // Với môi trường development, trả về đường dẫn không có /thitheo
+    return cleanPath;
+  };
+
   // Hiển thị loading spinner khi chưa mount hoặc đang loading
   if (!mounted || (loading && products.length === 0)) {
     return (
@@ -186,7 +202,7 @@ export default function FeaturedProducts() {
                 ) : (
                   <div className="relative w-full pb-[100%] overflow-hidden">
                     <img
-                      src={product.image ? product.image.split('?')[0] : '/images/products/product-placeholder.svg'}
+                      src={getImagePath(product.image)}
                       alt={product.name}
                       className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
                       onError={(e) => {
