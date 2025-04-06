@@ -126,7 +126,7 @@ export default function ProductsPage() {
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product);
+    addToCart(product, 1);
   };
 
   return (

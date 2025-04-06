@@ -38,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     
     setIsAdding(true);
-    addToCart(product);
+    addToCart(product, 1);
     
     // Reset sau 1 giây
     setTimeout(() => {
