@@ -140,20 +140,45 @@ export default function CategoryGrid() {
           <Link 
             key={category.id} 
             href={`/products?category=${category.slug}`}
-            className="relative overflow-hidden rounded-lg shadow-md group h-64"
+            className="relative overflow-hidden rounded-lg shadow-md group h-64 flex items-center justify-center bg-gray-50"
           >
-            {imageErrors[category.id] ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                <FaImage className="text-gray-400 text-5xl" />
-              </div>
-            ) : (
-              <img
-                src={getCategoryImagePath(category.image)}
-                alt={category.name}
-                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition duration-300"
-                onError={() => handleImageError(category.id)}
-              />
-            )}
+            <div className="absolute inset-0 w-full h-full">
+              {imageErrors[category.id] ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                  <FaImage className="text-gray-400 text-5xl" />
+                </div>
+              ) : (
+                <img
+                  src={getCategoryImagePath(category.image)}
+                  alt={category.name}
+                  className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition duration-300"
+                  onError={(e) => {
+                    console.log(`[CategoryGrid] Image error for ${category.name}`);
+                    // Thử sử dụng placeholder trước khi gọi handleImageError
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null; // Ngăn vòng lặp lỗi
+                    
+                    // Kiểm tra đường dẫn ảnh
+                    if (category.image.includes('placeholder') || category.image.includes('categories/product')) {
+                      // Đã là placeholder, đánh dấu lỗi
+                      handleImageError(category.id);
+                    } else {
+                      // Thử dùng ảnh sản phẩm từ thư mục /images/products
+                      const productImagePath = category.image.replace('categories', 'products');
+                      target.src = getCategoryImagePath(productImagePath);
+                      
+                      // Nếu vẫn lỗi, chuyển sang placeholder cuối cùng
+                      target.onerror = () => {
+                        target.onerror = null;
+                        target.src = getCategoryImagePath('/images/products/product-placeholder.svg');
+                        // Nếu placeholder cuối cùng cũng lỗi
+                        target.onerror = () => handleImageError(category.id);
+                      };
+                    }
+                  }}
+                />
+              )}
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
               <h3 className="text-xl font-semibold mb-1">{category.name}</h3>

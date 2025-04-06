@@ -188,31 +188,47 @@ export default function FeaturedProducts() {
         <div className="text-red-600 text-center mb-6">{error}</div>
       )}
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map(product => {
-          const displayPrice = product.discountPrice || product.price;
-          const hasDiscount = product.discountPrice !== null && product.discountPrice < product.price;
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => {
+          const hasDiscount = product.discountPrice !== null;
+          const displayPrice = hasDiscount ? (product.discountPrice as number) : product.price;
           
           return (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-              <Link href={`/products/${product.id}`} className="block relative h-auto">
-                {imageErrors[product.id] ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <FaImage className="text-gray-400 text-5xl" />
-                  </div>
-                ) : (
-                  <div className="relative w-full pb-[60%] overflow-hidden">
-                    <img
-                      src={getProductImagePath(product.image)}
-                      alt={product.name}
-                      className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <Link href={`/products/${product.id}`} className="block relative">
+                <div className="relative w-full pb-[75%] overflow-hidden">
+                  <img
+                    src={getProductImagePath(product.image.split('?')[0])}
+                    alt={product.name}
+                    className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      console.log(`[FeaturedProducts] Image error for ${product.name}`);
+                      target.onerror = null; // Ngăn vòng lặp lỗi
+                      
+                      // Thử sử dụng placeholder nếu ảnh chính không tải được
+                      if (!product.image.includes('placeholder')) {
                         target.src = getProductImagePath('/images/products/product-placeholder.svg');
-                      }}
-                    />
-                  </div>
-                )}
+                      } else {
+                        // Nếu đã là placeholder rồi mà vẫn lỗi, hiển thị icon
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          const iconContainer = document.createElement('div');
+                          iconContainer.className = 'absolute inset-0 flex items-center justify-center bg-gray-100';
+                          
+                          // Tạo icon placeholder bằng CSS
+                          const iconElement = document.createElement('div');
+                          iconElement.className = 'text-gray-400 text-5xl flex items-center justify-center';
+                          iconElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" /></svg>';
+                          
+                          iconContainer.appendChild(iconElement);
+                          parent.appendChild(iconContainer);
+                        }
+                      }
+                    }}
+                  />
+                </div>
                 {hasDiscount && (
                   <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md text-sm font-bold">
                     Sale
@@ -222,7 +238,7 @@ export default function FeaturedProducts() {
               
               <div className="p-4">
                 <Link href={`/products/${product.id}`} className="block">
-                  <h3 className="text-lg font-semibold mb-2 hover:text-red-600">{product.name}</h3>
+                  <h3 className="text-lg font-semibold mb-2 hover:text-red-600 line-clamp-2 h-14">{product.name}</h3>
                 </Link>
                 
                 <div className="flex justify-between items-end mb-4">
