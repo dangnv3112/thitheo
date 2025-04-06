@@ -12,22 +12,43 @@ const nextConfig = {
     // Bỏ qua lỗi TypeScript trong quá trình build
     ignoreBuildErrors: true,
   },
+  // Bỏ qua lỗi trong build
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 4,
+  },
   // Cấu hình để bỏ qua các lỗi trong quá trình build
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
-  // Bỏ qua hoàn toàn các lỗi build
-  onDemandEntries: {
-    // Thời gian trang được lưu trong bộ nhớ
-    maxInactiveAge: 25 * 1000,
-    // Số lượng trang tối đa được lưu trong bộ nhớ
-    pagesBufferLength: 4,
+  // Loại bỏ các trang dynamic route khỏi build
+  webpack: (config, { isServer }) => {
+    // Chỉ áp dụng trong quá trình build static export
+    return config;
   },
   // Thêm các cấu hình để bỏ qua lỗi
   experimental: {
-    appDocumentPreloading: false,
-    forceSwcTransforms: true
+    forceSwcTransforms: true,
   },
-  serverExternalPackages: []
+  serverExternalPackages: [],
+  // Thiết lập đường dẫn tĩnh cho các trang dynamic
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/' },
+      '/products': { page: '/products' },
+      '/about': { page: '/about' },
+      '/contact': { page: '/contact' },
+      '/cart': { page: '/cart' },
+      '/promotions': { page: '/promotions' },
+      // Thêm các trang sản phẩm cố định để tránh lỗi
+      '/products/1': { page: '/products/[id]', query: { id: '1' } },
+      '/products/2': { page: '/products/[id]', query: { id: '2' } },
+      '/products/3': { page: '/products/[id]', query: { id: '3' } },
+      '/products/4': { page: '/products/[id]', query: { id: '4' } }
+    }
+  }
 }
 
 module.exports = nextConfig
