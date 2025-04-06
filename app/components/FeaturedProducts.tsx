@@ -195,13 +195,13 @@ export default function FeaturedProducts() {
           
           return (
             <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-              <Link href={`/products/${product.id}`} className="block relative h-64">
+              <Link href={`/products/${product.id}`} className="block relative h-auto">
                 {imageErrors[product.id] ? (
                   <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
                     <FaImage className="text-gray-400 text-5xl" />
                   </div>
                 ) : (
-                  <div className="relative w-full pb-[100%] overflow-hidden">
+                  <div className="relative w-full pb-[60%] overflow-hidden">
                     <img
                       src={getProductImagePath(product.image)}
                       alt={product.name}
