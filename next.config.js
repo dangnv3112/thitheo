@@ -30,25 +30,6 @@ const nextConfig = {
     forceSwcTransforms: true,
   },
   serverExternalPackages: [],
-  // Thiết lập đường dẫn tĩnh cho các trang dynamic
-  exportPathMap: async function (
-    defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    return {
-      '/': { page: '/' },
-      '/products': { page: '/products' },
-      '/about': { page: '/about' },
-      '/contact': { page: '/contact' },
-      '/cart': { page: '/cart' },
-      '/promotions': { page: '/promotions' },
-      // Thêm các trang sản phẩm cố định để tránh lỗi
-      '/products/1': { page: '/products/[id]', query: { id: '1' } },
-      '/products/2': { page: '/products/[id]', query: { id: '2' } },
-      '/products/3': { page: '/products/[id]', query: { id: '3' } },
-      '/products/4': { page: '/products/[id]', query: { id: '4' } }
-    }
-  }
 }
 
 module.exports = nextConfig

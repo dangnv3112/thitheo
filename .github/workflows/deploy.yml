@@ -44,7 +44,7 @@ jobs:
             mkdir -p out
             
             # Tạo trang chủ mặc định
-            cat > out/index.html << EOL
+            cat > out/index.html << 'EOFMARKER'
             <!DOCTYPE html>
             <html>
             <head>
@@ -64,10 +64,10 @@ jobs:
               <p>Nếu bạn cần hỗ trợ, vui lòng liên hệ qua số điện thoại: <strong>0123 456 789</strong></p>
             </body>
             </html>
-            EOL
+            EOFMARKER
             
             # Tạo trang 404 mặc định
-            cat > out/404.html << EOL
+            cat > out/404.html << 'EOFMARKER'
             <!DOCTYPE html>
             <html>
             <head>
@@ -87,7 +87,7 @@ jobs:
               <a href="/thitheo" class="btn">Quay lại trang chủ</a>
             </body>
             </html>
-            EOL
+            EOFMARKER
             
             # Sao chép các assets cần thiết nếu có
             if [ -d "./public" ]; then
