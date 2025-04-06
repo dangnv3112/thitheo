@@ -13,11 +13,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Cấu hình để bỏ qua các lỗi trong quá trình build
-  experimental: {
-    // Bỏ qua lỗi build liên quan đến dynamic routes
-    skipTrailingSlashRedirect: true,
-    skipMiddlewareUrlNormalize: true
-  }
+  skipTrailingSlashRedirect: true,
+  skipMiddlewareUrlNormalize: true
 }
 
 module.exports = nextConfig

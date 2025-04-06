@@ -8,7 +8,6 @@ import { getProducts, Product } from '../../utils/excelHandler';
 import { FaArrowLeft, FaShoppingCart, FaImage } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/format';
-import { generateProductStaticParams } from '../../generateStaticParams';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -224,23 +223,4 @@ export default function ProductDetail() {
       </div>
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  try {
-    const products = await getProducts();
-    
-    return products.map((product) => ({
-      id: String(product.id),
-    }));
-  } catch (error) {
-    console.error('Error generating static params for products:', error);
-    // Fallback với một số ID cơ bản
-    return [
-      { id: '1' },
-      { id: '2' },
-      { id: '3' },
-      { id: '4' }
-    ];
-  }
 } 
