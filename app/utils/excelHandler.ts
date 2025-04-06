@@ -704,28 +704,28 @@ const defaultCategories: Category[] = [
     name: 'Thịt Heo Tươi',
     slug: 'thit-heo-tuoi',
     description: 'Thịt heo tươi ngon, được đảm bảo nguồn gốc và an toàn thực phẩm',
-    image: '/images/products/thitheotuoi.png'
+    image: '/images/categories/thitheotuoi.png'
   },
   {
     id: 2,
     name: 'Thịt Heo Đông Lạnh',
     slug: 'thit-heo-dong-lanh',
     description: 'Thịt heo đông lạnh giữ nguyên dưỡng chất và hương vị',
-    image: '/images/products/donglanh.jpg'
+    image: '/images/categories/donglanh.jpg'
   },
   {
     id: 3,
     name: 'Thịt Heo Chế Biến',
     slug: 'thit-heo-che-bien',
     description: 'Các sản phẩm từ thịt heo đã được sơ chế và chế biến sẵn',
-    image: '/images/products/bachi.jpg'
+    image: '/images/categories/bachi.jpg'
   },
   {
     id: 4,
     name: 'Sản Phẩm Đặc Biệt',
     slug: 'san-pham-dac-biet',
     description: 'Các sản phẩm đặc biệt và cao cấp từ thịt heo',
-    image: '/images/products/suon-non.jpg'
+    image: '/images/categories/suon-non.jpg'
   }
 ];
 
