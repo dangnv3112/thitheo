@@ -1,13 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '../components/ProductCard';
 import { getProducts, Product } from '../utils/excelHandler';
 import { FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 
-export default function SearchResults() {
+// Component chính bọc trong Suspense
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex justify-center items-center h-32">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+        </div>
+      </div>
+    }>
+      <SearchResults />
+    </Suspense>
+  );
+}
+
+// Component con sử dụng useSearchParams
+function SearchResults() {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
   
