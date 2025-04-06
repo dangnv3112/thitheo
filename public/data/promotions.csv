@@ -1,0 +1,4 @@
+id,title,description,startDate,endDate,discountPercent,image,code,isActive
+1,"Giảm giá 15% cho đơn hàng trên 500.000đ","Nhập mã THOGIO15 để được giảm 15% cho đơn hàng trên 500.000đ.",2025-04-01,2025-04-30,15,/images/products/product-placeholder.svg,THOGIO15,TRUE
+2,"Mua 2 tặng 1 sản phẩm cùng loại","Khi mua 2 sản phẩm cùng loại sẽ được tặng 1 sản phẩm tương tự.",2025-04-10,2025-04-20,33,/images/products/product-placeholder.svg,MUA2TANG1,TRUE
+3,"Freeship cho đơn hàng từ 300.000đ","Miễn phí vận chuyển cho đơn hàng từ 300.000đ trong phạm vi 10km.",2025-04-01,2025-05-31,0,/images/products/product-placeholder.svg,FREESHIP,TRUE 

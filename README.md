@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tho Gio - Website Thịt Heo Tươi Ngon
 
-## Getting Started
+Website bán thịt heo chất lượng cao, hỗ trợ đặt hàng trực tuyến và giao hàng tận nơi.
 
-First, run the development server:
+## Tính năng chính
 
+- Hiển thị danh sách sản phẩm thịt heo phân loại theo danh mục
+- Tìm kiếm và lọc sản phẩm theo nhiều tiêu chí
+- Trang thông tin chi tiết sản phẩm
+- Hiển thị bản đồ cửa hàng với Google Maps
+- Liên hệ qua form và qua các kênh mạng xã hội
+- Responsive design cho cả máy tính và điện thoại di động
+- Quản lý dữ liệu sản phẩm qua file Excel
+
+## Công nghệ sử dụng
+
+- [Next.js](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - JavaScript với kiểm tra kiểu dữ liệu
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
+- [React Icons](https://react-icons.github.io/react-icons/) - Thư viện icon
+- [@react-google-maps/api](https://www.npmjs.com/package/@react-google-maps/api) - Tích hợp Google Maps
+- [xlsx](https://www.npmjs.com/package/xlsx) - Đọc/ghi file Excel
+
+## Cài đặt và chạy
+
+### Yêu cầu:
+
+- Node.js 16+ và npm
+
+### Các bước cài đặt:
+
+1. Clone repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/username/tho-gio.git
+cd tho-gio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Cài đặt dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Chạy server development:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Mở trình duyệt và truy cập [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+### Để build cho production:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Cấu trúc dự án
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+tho-gio/
+├── app/                   # Next.js App Router
+│   ├── components/        # React components
+│   ├── products/          # Products pages
+│   ├── contact/           # Contact page
+│   ├── about/             # About page
+│   ├── utils/             # Utility functions
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx           # Home page
+├── public/                # Static assets
+│   ├── images/            # Images and icons
+│   └── data/              # Data files (Excel)
+└── ...                    # Other configuration files
+```
 
-## Deploy on Vercel
+## Quản lý dữ liệu với Excel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Website hỗ trợ quản lý dữ liệu thông qua file Excel. Để cập nhật thông tin sản phẩm, danh mục, thông tin cửa hàng và thông tin công ty, bạn có thể:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Chỉnh sửa file Excel trong thư mục `/public/data/tho-gio-data.xlsx`
+2. File Excel cần có 4 sheet: "Products", "Categories", "StoreLocations", và "CompanyInfo"
+3. Mỗi sheet có cấu trúc cột riêng (xem hướng dẫn trong file `/public/data/README.md`)
+
+Website sẽ tự động đọc dữ liệu từ file Excel này và hiển thị thông tin mới nhất.
+
+## Google Maps API
+
+Để sử dụng tính năng bản đồ, bạn cần thay thế API key Google Maps trong file `Map.tsx` với key của bạn:
+
+```typescript
+<LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+```
+
+## Liên hệ
+
+- Email: info@thogio.vn
+- Website: https://thogio.vn
+- Facebook: https://facebook.com/thogio
+- Zalo: https://zalo.me/thogio

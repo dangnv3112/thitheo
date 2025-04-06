@@ -1,0 +1,9 @@
+id,name,price,discountPrice,image,description,unit,inStock,category,quantity,origin,storage
+1,"Thịt Ba Rọi",150000,135000,/images/products/product-placeholder.svg,"Thịt ba rọi heo tươi ngon, thích hợp để nướng hoặc chiên.",500g,TRUE,thit-heo-tuoi,100,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C hoặc trong ngăn đá tủ lạnh"
+2,"Sườn Non",200000,,/images/products/product-placeholder.svg,"Sườn non heo mềm, ngọt thịt, thích hợp để hầm hoặc nướng.",500g,TRUE,thit-heo-tuoi,80,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+3,"Thịt Nạc Vai",120000,108000,/images/products/product-placeholder.svg,"Thịt nạc vai heo thích hợp để nấu các món xào, kho.",500g,TRUE,thit-heo-tuoi,120,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+4,"Chân Giò Rút Xương",180000,,/images/products/product-placeholder.svg,"Chân giò heo đã rút xương, thích hợp để hầm hoặc nướng.",500g,FALSE,thit-heo-tuoi,0,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+5,"Thịt Nạc Đùi",135000,125000,/images/products/product-placeholder.svg,"Thịt nạc đùi heo thích hợp để nấu các món luộc, xào, kho.",500g,TRUE,thit-heo-tuoi,90,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+6,"Thịt Xay",110000,,/images/products/product-placeholder.svg,"Thịt heo xay sẵn, thích hợp để làm chả, nem, há cảo.",500g,TRUE,thit-heo-che-bien,75,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+7,"Sườn Cốt Lết",190000,175000,/images/products/product-placeholder.svg,"Sườn cốt lết heo tươi ngon, thích hợp để nướng, chiên, áp chảo.",500g,TRUE,thit-heo-tuoi,60,"Việt Nam","Bảo quản ở nhiệt độ 0-4°C"
+8,"Thịt Cốt Lết Đông Lạnh",160000,,/images/products/product-placeholder.svg,"Thịt cốt lết heo đông lạnh nhập khẩu, thích hợp để nướng, chiên.",500g,TRUE,thit-heo-dong-lanh,50,"Mỹ","Bảo quản ở nhiệt độ dưới -18°C" 
