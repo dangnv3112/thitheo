@@ -58,6 +58,32 @@ jobs:
             ls -la ./out
           fi
       
+      - name: Ensure images and data files are copied to the output
+        run: |
+          # Đảm bảo hình ảnh và dữ liệu được copy đến đúng vị trí
+          if [ -d "./public/thitheo" ]; then
+            # Nếu không có thư mục thitheo trong out, tạo nó
+            mkdir -p out/thitheo
+            # Copy nội dung từ public/thitheo vào out/thitheo
+            cp -r public/thitheo/* out/thitheo/ || true
+            echo "Copied thitheo directory content to output"
+            ls -la ./out/thitheo
+          fi
+          
+          # Đảm bảo các thư mục images và data có trong out
+          mkdir -p out/images/categories
+          mkdir -p out/images/products
+          mkdir -p out/data
+          
+          # Copy hình ảnh và dữ liệu từ public vào out nếu chưa có
+          if [ -d "./public/images" ]; then
+            cp -r public/images/* out/images/ || true
+          fi
+          
+          if [ -d "./public/data" ]; then
+            cp -r public/data/* out/data/ || true
+          fi
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
