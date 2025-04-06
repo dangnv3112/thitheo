@@ -146,12 +146,16 @@ export default function CategoryGrid() {
                 <FaImage className="text-gray-400 text-5xl" />
               </div>
             ) : (
-              <img
-                src={category.image ? category.image.split('?')[0] : '/images/categories/thitheotuoi.png'}
-                alt={category.name}
-                className="absolute w-full h-full object-cover object-center group-hover:scale-110 transition duration-300"
-                onError={() => handleImageError(category.id)}
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={category.image ? category.image.split('?')[0] : '/images/categories/thitheotuoi.png'}
+                  alt={category.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  className="object-cover object-center group-hover:scale-110 transition duration-300"
+                  onError={() => handleImageError(category.id)}
+                />
+              </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
