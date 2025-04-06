@@ -223,4 +223,13 @@ export default function ProductDetail() {
       </div>
     </div>
   );
+}
+
+// Thêm hàm generateStaticParams để hỗ trợ static export
+export async function generateStaticParams() {
+  const products = await getProducts();
+  
+  return products.map((product) => ({
+    id: String(product.id),
+  }));
 } 
