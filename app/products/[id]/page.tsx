@@ -8,6 +8,7 @@ import { getProducts, Product } from '../../utils/excelHandler';
 import { FaArrowLeft, FaShoppingCart, FaImage } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/format';
+import { generateProductStaticParams } from '../../generateStaticParams';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -223,4 +224,6 @@ export default function ProductDetail() {
       </div>
     </div>
   );
-} 
+}
+
+export { generateProductStaticParams as generateStaticParams }; 
