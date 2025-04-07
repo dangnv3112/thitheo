@@ -46,14 +46,55 @@ jobs:
           # Thử cài đặt phụ thuộc với --prefer-offline để sử dụng cache
           npm install --prefer-offline --legacy-peer-deps || npm install --legacy-peer-deps
           # Cài đặt các dependency bị thiếu
-          npm install tailwindcss framer-motion aos --legacy-peer-deps
+          npm install tailwindcss postcss autoprefixer --legacy-peer-deps
+          npm install @tailwindcss/forms @tailwindcss/typography --legacy-peer-deps
           # Cài đặt sharp cho xử lý hình ảnh tối ưu
           npm install sharp --force
           echo "Hoàn tất cài đặt phụ thuộc."
            
       - name: Check installed packages
-        run: npm list tailwindcss framer-motion aos
+        run: npm list tailwindcss
         
+      - name: Set up project files
+        run: |
+          # Đảm bảo các file cấu hình tồn tại
+          if [ ! -f "tailwind.config.js" ]; then
+            echo "Tạo file tailwind.config.js"
+            cat > tailwind.config.js << 'EOL'
+            /** @type {import('tailwindcss').Config} */
+            module.exports = {
+              content: [
+                './pages/**/*.{js,ts,jsx,tsx,mdx}',
+                './components/**/*.{js,ts,jsx,tsx,mdx}',
+                './app/**/*.{js,ts,jsx,tsx,mdx}',
+              ],
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#ef4444',
+                  },
+                },
+              },
+              plugins: [
+                require('@tailwindcss/forms'),
+                require('@tailwindcss/typography'),
+              ],
+            }
+            EOL
+          fi
+          
+          if [ ! -f "postcss.config.js" ]; then
+            echo "Tạo file postcss.config.js"
+            cat > postcss.config.js << 'EOL'
+            module.exports = {
+              plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+              },
+            }
+            EOL
+          fi
+      
       - name: Clean build directory
         run: |
           rm -rf .next
@@ -80,6 +121,7 @@ jobs:
         id: build
         run: |
           echo "Bắt đầu xây dựng ứng dụng Next.js với cấu hình hiện tại..."
+          npx tailwindcss init -p # Đảm bảo các file config tồn tại
           npm run build || {
             echo "::warning::Build với cấu hình hiện tại thất bại, đang thử với cấu hình đơn giản hơn..."
             cp next.config.js.simple next.config.js

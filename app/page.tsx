@@ -1,14 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from "next/image";
+import { useState } from 'react';
 import Link from "next/link";
-import { FaFacebook, FaPhone, FaCheckCircle, FaShippingFast, FaLeaf, FaAward, FaClock, FaCarrot, FaStar } from "react-icons/fa";
-import { SiZalo } from "react-icons/si";
-import Banner from "./components/Banner";
-import FeaturedProducts from "./components/FeaturedProducts";
-import CategoryGrid from "./components/CategoryGrid";
-import config from './config';
+import { FaShippingFast, FaLeaf, FaAward, FaClock } from "react-icons/fa";
 import { getAssetPath } from './utils/paths';
 import { createUrlPath } from './config/paths';
 
@@ -21,7 +15,7 @@ interface Category {
   description: string;
 }
 
-// Danh mục sản phẩm mặc định trong trường hợp không lấy được từ config
+// Danh mục sản phẩm mặc định
 const defaultCategories: Category[] = [
   {
     id: 1,
@@ -54,33 +48,6 @@ const defaultCategories: Category[] = [
 ];
 
 export default function Home() {
-  // Tắt chế độ bảo trì
-  const [isMaintenanceMode] = useState(false);
-  const [categories, setCategories] = useState<Category[]>(defaultCategories);
-  
-  useEffect(() => {
-    // Load categories từ config nếu có
-    if (config.defaultCategories && Array.isArray(config.defaultCategories)) {
-      setCategories(config.defaultCategories as Category[]);
-    }
-  }, []);
-
-  if (isMaintenanceMode) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-        <div className="text-center max-w-lg">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">{config.maintenanceMessage.title}</h1>
-          <p className="text-gray-600 mb-6">{config.maintenanceMessage.message}</p>
-          <div className="w-16 h-1 bg-red-500 mx-auto mb-6"></div>
-          <p className="text-sm text-gray-500">
-            {config.maintenanceMessage.details}
-            <br />Xin lỗi vì sự bất tiện này.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       {/* Hero Section */}
@@ -142,7 +109,7 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category: Category, index: number) => (
+            {defaultCategories.map((category: Category, index: number) => (
               <div 
                 key={category.id} 
                 className="group relative overflow-hidden rounded-lg shadow-lg h-64 transition-transform duration-300 hover:-translate-y-2"
@@ -176,7 +143,9 @@ export default function Home() {
             <p className="mt-4 text-gray-600 max-w-2xl mx-auto">Những sản phẩm được khách hàng yêu thích và đánh giá cao về chất lượng cũng như hương vị.</p>
           </div>
           
-          <FeaturedProducts />
+          <div className="text-center">
+            <p className="text-gray-600">Đang tải danh sách sản phẩm...</p>
+          </div>
         </div>
       </section>
     </>
