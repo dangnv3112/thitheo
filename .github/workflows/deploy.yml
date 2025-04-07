@@ -28,26 +28,64 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: 'npm'
           
-      - name: Install dependencies
+      - name: Check package.json
+        run: cat package.json
+        
+      - name: Clean Install
         run: |
-          npm ci || npm install
-          npm install -D tailwindcss postcss autoprefixer @tailwindcss/forms @tailwindcss/typography
-          npm install sharp
+          rm -rf node_modules
+          rm -rf package-lock.json
+          npm install
           
-      - name: Debug dependencies
+      - name: Install Tailwind Dependencies
         run: |
-          echo "Checking installed dependencies:"
-          npm list tailwindcss
-          npm list postcss
-          npm list autoprefixer
-          ls -la node_modules/tailwindcss
+          npm install -D tailwindcss@3.4.1 postcss@8.4.38 autoprefixer@10.4.19
+          npm install -D @tailwindcss/forms@0.5.7 @tailwindcss/typography@0.5.10
+          npm list tailwindcss postcss autoprefixer
           
-      - name: Build
+      - name: Install Sharp
+        run: npm install sharp
+        
+      - name: Fix postcss.config.js
         run: |
-          echo "Starting build process..."
-          npm run build
+          cat > postcss.config.js << 'EOL'
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+EOL
+          cat postcss.config.js
+          
+      - name: Fix tailwind.config.js
+        run: |
+          cat > tailwind.config.js << 'EOL'
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#ef4444',
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
+}
+EOL
+          cat tailwind.config.js
+          
+      - name: Build Process
+        run: npm run build
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
