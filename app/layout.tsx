@@ -1,3 +1,5 @@
+'use client';
+
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Header from './components/Header';
@@ -15,12 +17,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="vi">
-      <body suppressHydrationWarning className={inter.className}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Thỏ Giò - Đặc sản Huế</title>
+        <meta name="description" content="Thỏ Giò - Đặc sản Huế chất lượng cao, giao hàng tận nơi" />
+      </head>
+      <body className={inter.className}>
         <CartProvider>
           <Header />
           <main>{children}</main>
