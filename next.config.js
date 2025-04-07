@@ -9,8 +9,6 @@ const nextConfig = {
   basePath: '/thitheo',
   assetPrefix: '/thitheo',
   trailingSlash: true,
-  // Chỉ định các thư mục cần được sao chép từ public vào thư mục output
-  distDir: 'out',
   // Bỏ qua lỗi để build thành công
   eslint: {
     // Bỏ qua lỗi ESLint trong quá trình build

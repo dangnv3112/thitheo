@@ -48,40 +48,35 @@ jobs:
         run: npm install sharp
         
       - name: Fix postcss.config.js
-        run: |
-          cat > postcss.config.js << 'EOL'
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-EOL
-          cat postcss.config.js
+        run: 'echo "module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }" > postcss.config.js'
           
       - name: Fix tailwind.config.js
         run: |
-          cat > tailwind.config.js << 'EOL'
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: '#ef4444',
-      },
-    },
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
-}
-EOL
+          echo "/** @type {import('tailwindcss').Config} */" > tailwind.config.js
+          echo "module.exports = {" >> tailwind.config.js
+          echo "  content: [" >> tailwind.config.js
+          echo "    './pages/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
+          echo "    './components/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
+          echo "    './app/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
+          echo "  ]," >> tailwind.config.js
+          echo "  theme: {" >> tailwind.config.js
+          echo "    extend: {" >> tailwind.config.js
+          echo "      colors: {" >> tailwind.config.js
+          echo "        primary: '#ef4444'," >> tailwind.config.js
+          echo "      }," >> tailwind.config.js
+          echo "    }," >> tailwind.config.js
+          echo "  }," >> tailwind.config.js
+          echo "  plugins: [" >> tailwind.config.js
+          echo "    require('@tailwindcss/forms')," >> tailwind.config.js
+          echo "    require('@tailwindcss/typography')," >> tailwind.config.js
+          echo "  ]," >> tailwind.config.js
+          echo "}" >> tailwind.config.js
+          
+      - name: Debug configs
+        run: |
+          echo "PostCSS config:"
+          cat postcss.config.js
+          echo "Tailwind config:"
           cat tailwind.config.js
           
       - name: Build Process
