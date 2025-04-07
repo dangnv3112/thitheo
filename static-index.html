@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thỏ Giò - Đặc sản Huế</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    header {
+      background-color: #ef4444;
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    
+    .hero {
+      background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1508333706572-ea9fba02c5a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 5rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: #ef4444;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #dc2626;
+    }
+    
+    .featured {
+      padding: 5rem 0;
+      text-align: center;
+    }
+    
+    .section-title {
+      font-size: 2.2rem;
+      margin-bottom: 3rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background-color: #ef4444;
+    }
+    
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 2rem;
+    }
+    
+    .product {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    .product:hover {
+      transform: translateY(-10px);
+    }
+    
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .product-info {
+      padding: 1.5rem;
+    }
+    
+    .product-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-price {
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 1rem;
+    }
+    
+    .about {
+      background-color: #f2f2f2;
+      padding: 5rem 0;
+    }
+    
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .about-text h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-text p {
+      margin-bottom: 1rem;
+    }
+    
+    .about-img img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 3rem 0 1rem;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 2rem;
+    }
+    
+    .footer-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #444;
+      color: #aaa;
+    }
+    
+    @media (max-width: 768px) {
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">Thỏ Giò</div>
+        <nav>
+          <ul style="list-style: none; display: flex; gap: 20px;">
+            <li><a href="#" style="color: white; text-decoration: none;">Trang Chủ</a></li>
+            <li><a href="#products" style="color: white; text-decoration: none;">Sản Phẩm</a></li>
+            <li><a href="#about" style="color: white; text-decoration: none;">Giới Thiệu</a></li>
+            <li><a href="#contact" style="color: white; text-decoration: none;">Liên Hệ</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Đặc Sản Huế Chất Lượng Cao</h1>
+      <p>Chúng tôi mang đến những sản phẩm đặc sản Huế với chất lượng tuyệt hảo, được chế biến theo công thức truyền thống.</p>
+      <a href="#products" class="btn">Khám Phá Ngay</a>
+    </div>
+  </section>
+
+  <section class="featured" id="products">
+    <div class="container">
+      <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
+      <div class="products">
+        <div class="product">
+          <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80" alt="Nem chua">
+          <div class="product-info">
+            <h3 class="product-title">Nem Chua Huế</h3>
+            <p class="product-price">135.000 đ</p>
+            <p>Nem chua Huế thơm ngon, chua ngọt đặc trưng, làm từ thịt heo tươi ngon.</p>
+          </div>
+        </div>
+        <div class="product">
+          <img src="https://images.unsplash.com/photo-1603089183654-ee9d101cb392?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80" alt="Chả Huế">
+          <div class="product-info">
+            <h3 class="product-title">Chả Huế Truyền Thống</h3>
+            <p class="product-price">175.000 đ</p>
+            <p>Chả Huế giòn thơm, được làm từ những nguyên liệu tươi ngon nhất.</p>
+          </div>
+        </div>
+        <div class="product">
+          <img src="https://images.unsplash.com/photo-1564988252816-da63ec834579?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80" alt="Mắm tôm chua">
+          <div class="product-info">
+            <h3 class="product-title">Mắm Tôm Chua Huế</h3>
+            <p class="product-price">95.000 đ</p>
+            <p>Mắm tôm chua Huế đậm đà, là gia vị không thể thiếu trong bữa ăn gia đình.</p>
+          </div>
+        </div>
+        <div class="product">
+          <img src="https://images.unsplash.com/photo-1515668236457-83c3b8764839?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80" alt="Kẹo mè xửng">
+          <div class="product-info">
+            <h3 class="product-title">Kẹo Mè Xửng</h3>
+            <p class="product-price">85.000 đ</p>
+            <p>Kẹo mè xửng truyền thống, thơm ngon, béo ngậy với vị ngọt dịu từ đường mật.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>Về Chúng Tôi</h2>
+          <p>Thỏ Giò là thương hiệu uy tín chuyên cung cấp các sản phẩm đặc sản Huế chất lượng cao đến tận tay người tiêu dùng.</p>
+          <p>Với hơn 10 năm kinh nghiệm, chúng tôi tự hào mang đến những sản phẩm được chế biến theo công thức truyền thống, đảm bảo vệ sinh an toàn thực phẩm.</p>
+          <p>Sứ mệnh của chúng tôi là bảo tồn và phát huy những giá trị ẩm thực truyền thống của Huế, đồng thời đem đến cho khách hàng những trải nghiệm ẩm thực tuyệt vời.</p>
+        </div>
+        <div class="about-img">
+          <img src="https://images.unsplash.com/photo-1553001595-99a6f551386f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1173&q=80" alt="Đặc sản Huế">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h3 class="footer-heading">Thỏ Giò</h3>
+          <p>Đặc sản Huế chất lượng cao.<br>Giao hàng tận nơi trên toàn quốc.</p>
+        </div>
+        <div>
+          <h3 class="footer-heading">Liên Hệ</h3>
+          <ul class="footer-links">
+            <li>Địa chỉ: 123 Đường Trần Hưng Đạo, Huế</li>
+            <li>Điện thoại: 0123 456 789</li>
+            <li>Email: info@thogio.com</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Theo Dõi</h3>
+          <ul class="footer-links">
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Zalo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-heading">Thông Tin</h3>
+          <ul class="footer-links">
+            <li><a href="#">Chính sách giao hàng</a></li>
+            <li><a href="#">Chính sách đổi trả</a></li>
+            <li><a href="#">Điều khoản sử dụng</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Thỏ Giò. Tất cả quyền được bảo lưu.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html> 

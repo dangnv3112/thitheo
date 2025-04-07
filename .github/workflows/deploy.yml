@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Static Site to GitHub Pages
 
 on:
   push:
@@ -17,102 +17,44 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      NODE_ENV: production
       
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          
-      - name: Create out directory
-        run: mkdir -p out
-          
-      - name: Setup config files
+      - name: Create static site
         run: |
-          cp workflow-package.json package.json
-          cp workflow-postcss.config.js postcss.config.js
-          cp workflow-tailwind.config.js tailwind.config.js
-          cp workflow-next.config.js next.config.js
+          mkdir -p out
+          cp static-index.html out/index.html
           
-      - name: Install global dependencies
-        run: |
-          npm install -g tailwindcss postcss autoprefixer
-          
-      - name: Clean Install
-        run: |
-          rm -rf node_modules
-          rm -rf package-lock.json
-          npm install --legacy-peer-deps
-          
-      - name: Install tailwindcss packages manually
-        run: |
-          npm install -D tailwindcss@3.3.6 postcss@8.4.32 autoprefixer@10.4.16 --legacy-peer-deps
-          npm install -D @tailwindcss/forms@0.5.7 @tailwindcss/typography@0.5.10 --legacy-peer-deps
-          
-      - name: Debug node_modules
-        run: |
-          echo "Checking tailwindcss installation:"
-          find node_modules -name "tailwindcss" -type d
-          ls -la node_modules/tailwindcss || echo "tailwindcss directory not found"
-          echo "Checking postcss installation:"
-          find node_modules -name "postcss" -type d
-          ls -la node_modules/postcss || echo "postcss directory not found"
-          echo "Checking autoprefixer installation:"
-          find node_modules -name "autoprefixer" -type d
-          ls -la node_modules/autoprefixer || echo "autoprefixer directory not found"
-          
-      - name: Verify config files
-        run: |
-          echo "postcss.config.js:"
-          cat postcss.config.js
-          echo "tailwind.config.js:"
-          cat tailwind.config.js
-          echo "next.config.js:"
-          cat next.config.js
-          
-      - name: Create simpler tailwind configuration
-        run: |
-          echo "/** @type {import('tailwindcss').Config} */ module.exports = { content: ['./app/**/*.{js,jsx,ts,tsx}'], theme: { extend: {} }, plugins: [] }" > tailwind.config.js
-          echo "module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }" > postcss.config.js
-          
-      - name: Create CSS file for Tailwind
-        run: |
-          mkdir -p app/styles
-          echo "@tailwind base; @tailwind components; @tailwind utilities;" > app/styles/tailwind.css
-          
-      - name: Link to new CSS file in layout
-        run: |
-          touch app/temp-layout.tsx
-          cat app/layout.tsx | sed "s|import './globals.css'|import './styles/tailwind.css'|g" > app/temp-layout.tsx
-          mv app/temp-layout.tsx app/layout.tsx
-          
-      - name: Try building
-        id: build
-        continue-on-error: true
-        run: npm run build
-          
-      - name: Create maintenance page if build failed
-        if: steps.build.outcome != 'success'
-        run: |
-          echo "Build failed, creating maintenance page"
-          echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tho Giò - Đang bảo trì</title><style>body{font-family:system-ui;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f9fafb}.content{text-align:center;max-width:400px;padding:2rem}h1{color:#1f2937;margin-bottom:1rem}p{color:#4b5563}.divider{width:60px;height:4px;background:#ef4444;margin:1.5rem auto}</style></head><body><div class="content"><h1>Website đang bảo trì</h1><p>Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.</p><div class="divider"></div><p>Vui lòng quay lại sau. Xin cảm ơn!</p></div></body></html>' > out/index.html
+          # Create a simple 404 page
+          cat > out/404.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>404 - Không tìm thấy trang</title>
+            <style>
+              body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f9fafb; }
+              .content { text-align: center; max-width: 400px; padding: 2rem; }
+              h1 { color: #1f2937; margin-bottom: 1rem; }
+              a { color: #ef4444; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <div class="content">
+              <h1>404 - Không tìm thấy trang</h1>
+              <p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>
+              <p><a href="/thitheo/">Quay lại trang chủ</a></p>
+            </div>
+          </body>
+          </html>
+          EOF
           
       - name: Check output directory
-        run: |
-          echo "Checking if out directory exists:"
-          if [ -d "out" ]; then
-            echo "Directory exists"
-            ls -la out/
-          else
-            echo "Creating out directory and maintenance page"
-            mkdir -p out
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tho Giò - Đang bảo trì</title><style>body{font-family:system-ui;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f9fafb}.content{text-align:center;max-width:400px;padding:2rem}h1{color:#1f2937;margin-bottom:1rem}p{color:#4b5563}.divider{width:60px;height:4px;background:#ef4444;margin:1.5rem auto}</style></head><body><div class="content"><h1>Website đang bảo trì</h1><p>Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.</p><div class="divider"></div><p>Vui lòng quay lại sau. Xin cảm ơn!</p></div></body></html>' > out/index.html
-          fi
+        run: ls -la out/
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
