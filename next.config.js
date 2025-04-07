@@ -1,27 +1,49 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Bật lại output: 'export' để tạo bản build tĩnh
+  // Xuất tĩnh
   output: 'export',
+  
+  // Tối ưu hóa hình ảnh
   images: {
     unoptimized: true,
+    disableStaticImages: true,
+    remotePatterns: [],
   },
-  // Đặt basePath và assetPrefix cho GitHub Pages
+  
+  // Cấu hình cho GitHub Pages
   basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  
+  // Thêm dấu / cuối URL
   trailingSlash: true,
-  // Bỏ qua lỗi để build thành công
-  eslint: {
-    // Bỏ qua lỗi ESLint trong quá trình build
-    ignoreDuringBuilds: true,
-  },
+  
+  // Bỏ qua lỗi TypeScript và ESLint
   typescript: {
-    // Bỏ qua lỗi TypeScript trong quá trình build
     ignoreBuildErrors: true,
   },
-  // Disable server components for static export
-  experimental: {
-    // appDir đã được bật mặc định từ Next.js 13+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
+  // Giảm giới hạn bộ nhớ
+  webpack: (config, { dev, isServer }) => {
+    // Giảm kích thước bundle
+    config.optimization = {
+      ...config.optimization,
+      minimize: true
+    }
+    
+    return config
+  },
+  
+  // Giảm thông tin
+  poweredByHeader: false,
+  
+  // Bỏ qua lỗi khi build
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
