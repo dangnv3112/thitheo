@@ -1,7 +1,11 @@
 'use client';
 
-// Add this for dynamic rendering - no static prerendering
-export const dynamic = 'force-dynamic';
+// Đánh dấu trang này là không tĩnh, không cần pre-render trong quá trình build
+export const dynamic = 'error';
+
+// Thêm cấu hình cho export tĩnh (static export)
+export const dynamicParams = false;
+export const revalidate = 0;
 
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
