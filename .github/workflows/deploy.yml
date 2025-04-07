@@ -70,57 +70,11 @@ jobs:
       - name: Create fallback HTML files
         run: |
           mkdir -p out
-          # Tạo index.html
-          echo '<!DOCTYPE html>' > out/index.html
-          echo '<html lang="vi">' >> out/index.html
-          echo '<head>' >> out/index.html
-          echo '  <meta charset="UTF-8">' >> out/index.html
-          echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> out/index.html
-          echo '  <title>Tho Giò - Đặc sản Huế</title>' >> out/index.html
-          echo '  <style>' >> out/index.html
-          echo '    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }' >> out/index.html
-          echo '    .container { max-width: 800px; text-align: center; padding: 2rem; }' >> out/index.html
-          echo '    h1 { color: #4a5568; margin-bottom: 1rem; }' >> out/index.html
-          echo '    p { color: #718096; margin-bottom: 1.5rem; }' >> out/index.html
-          echo '    .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }' >> out/index.html
-          echo '    .logo { width: 120px; height: 120px; margin-bottom: 2rem; }' >> out/index.html
-          echo '  </style>' >> out/index.html
-          echo '</head>' >> out/index.html
-          echo '<body>' >> out/index.html
-          echo '  <div class="container">' >> out/index.html
-          echo '    <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src=\'/thitheo/favicon.ico\'; this.onerror=null;">' >> out/index.html
-          echo '    <h1>Trang web đang được nâng cấp</h1>' >> out/index.html
-          echo '    <p>Chúng tôi đang làm việc để cải thiện trải nghiệm của bạn. Vui lòng quay lại sau.</p>' >> out/index.html
-          echo '    <a href="/" class="btn">Thử làm mới trang</a>' >> out/index.html
-          echo '  </div>' >> out/index.html
-          echo '</body>' >> out/index.html
-          echo '</html>' >> out/index.html
+          # Tạo file HTML cơ bản
+          echo '<html><head><title>Tho Giò - Đang bảo trì</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{font-family:system-ui;margin:0;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;}div{max-width:600px;text-align:center;padding:20px;}h1{color:#333;}p{color:#666;margin-bottom:20px;}a{display:inline-block;background:#2563eb;color:white;text-decoration:none;padding:10px 20px;border-radius:4px;}</style></head><body><div><h1>Trang web đang được nâng cấp</h1><p>Chúng tôi đang làm việc để cải thiện trải nghiệm của bạn. Vui lòng quay lại sau.</p><a href="/thitheo/">Quay lại trang chủ</a></div></body></html>' > out/index.html
           
           # Tạo 404.html
-          echo '<!DOCTYPE html>' > out/404.html
-          echo '<html lang="vi">' >> out/404.html
-          echo '<head>' >> out/404.html
-          echo '  <meta charset="UTF-8">' >> out/404.html
-          echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> out/404.html
-          echo '  <title>Tho Giò - Không tìm thấy trang</title>' >> out/404.html
-          echo '  <style>' >> out/404.html
-          echo '    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }' >> out/404.html
-          echo '    .container { max-width: 800px; text-align: center; padding: 2rem; }' >> out/404.html
-          echo '    h1 { color: #4a5568; margin-bottom: 1rem; }' >> out/404.html
-          echo '    p { color: #718096; margin-bottom: 1.5rem; }' >> out/404.html
-          echo '    .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }' >> out/404.html
-          echo '    .logo { width: 120px; height: 120px; margin-bottom: 2rem; }' >> out/404.html
-          echo '  </style>' >> out/404.html
-          echo '</head>' >> out/404.html
-          echo '<body>' >> out/404.html
-          echo '  <div class="container">' >> out/404.html
-          echo '    <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src=\'/thitheo/favicon.ico\'; this.onerror=null;">' >> out/404.html
-          echo '    <h1>Không tìm thấy trang</h1>' >> out/404.html
-          echo '    <p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>' >> out/404.html
-          echo '    <a href="/thitheo/" class="btn">Quay lại trang chủ</a>' >> out/404.html
-          echo '  </div>' >> out/404.html
-          echo '</body>' >> out/404.html
-          echo '</html>' >> out/404.html
+          echo '<html><head><title>Tho Giò - Không tìm thấy trang</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>body{font-family:system-ui;margin:0;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;}div{max-width:600px;text-align:center;padding:20px;}h1{color:#333;}p{color:#666;margin-bottom:20px;}a{display:inline-block;background:#2563eb;color:white;text-decoration:none;padding:10px 20px;border-radius:4px;}</style></head><body><div><h1>Không tìm thấy trang</h1><p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p><a href="/thitheo/">Quay lại trang chủ</a></div></body></html>' > out/404.html
           
       - name: Build Next.js app
         id: build
