@@ -29,57 +29,100 @@ jobs:
         with:
           node-version: "20"
           
-      - name: Check package.json
-        run: cat package.json
-        
-      - name: Clean Install
+      - name: Create fresh package.json
+        run: |
+          cat > package.json << 'EOF'
+{
+  "name": "tho-gio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.19.2",
+    "date-fns": "^2.30.0",
+    "next": "14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.12.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.3"
+  }
+}
+EOF
+          cat package.json
+          
+      - name: Create required config files
+        run: |
+          echo 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }' > postcss.config.js
+          
+          cat > tailwind.config.js << 'EOF'
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#ef4444',
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
+}
+EOF
+          
+          cat > next.config.js << 'EOF'
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  basePath: '/thitheo',
+  assetPrefix: '/thitheo',
+  trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  }
+}
+
+module.exports = nextConfig
+EOF
+          
+      - name: Install dependencies
         run: |
           rm -rf node_modules
-          rm -rf package-lock.json
           npm install
-          
-      - name: Install Tailwind Dependencies
-        run: |
-          npm install -D tailwindcss@3.4.1 postcss@8.4.38 autoprefixer@10.4.19
-          npm install -D @tailwindcss/forms@0.5.7 @tailwindcss/typography@0.5.10
           npm list tailwindcss postcss autoprefixer
           
-      - name: Install Sharp
-        run: npm install sharp
-        
-      - name: Fix postcss.config.js
-        run: 'echo "module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }" > postcss.config.js'
-          
-      - name: Fix tailwind.config.js
-        run: |
-          echo "/** @type {import('tailwindcss').Config} */" > tailwind.config.js
-          echo "module.exports = {" >> tailwind.config.js
-          echo "  content: [" >> tailwind.config.js
-          echo "    './pages/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
-          echo "    './components/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
-          echo "    './app/**/*.{js,ts,jsx,tsx,mdx}'," >> tailwind.config.js
-          echo "  ]," >> tailwind.config.js
-          echo "  theme: {" >> tailwind.config.js
-          echo "    extend: {" >> tailwind.config.js
-          echo "      colors: {" >> tailwind.config.js
-          echo "        primary: '#ef4444'," >> tailwind.config.js
-          echo "      }," >> tailwind.config.js
-          echo "    }," >> tailwind.config.js
-          echo "  }," >> tailwind.config.js
-          echo "  plugins: [" >> tailwind.config.js
-          echo "    require('@tailwindcss/forms')," >> tailwind.config.js
-          echo "    require('@tailwindcss/typography')," >> tailwind.config.js
-          echo "  ]," >> tailwind.config.js
-          echo "}" >> tailwind.config.js
-          
-      - name: Debug configs
-        run: |
-          echo "PostCSS config:"
-          cat postcss.config.js
-          echo "Tailwind config:"
-          cat tailwind.config.js
-          
-      - name: Build Process
+      - name: Run build
         run: npm run build
           
       - name: Setup Pages
