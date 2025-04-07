@@ -1,3 +1,13 @@
+/**
+ * @typedef {Object} Category
+ * @property {number} id - ID danh mục
+ * @property {string} name - Tên danh mục
+ * @property {string} slug - Slug URL của danh mục
+ * @property {string} image - Đường dẫn hình ảnh
+ * @property {string} description - Mô tả danh mục
+ */
+
+/** @type {Object} */
 const config = {
   // Tắt chế độ bảo trì
   maintenanceMode: false,
@@ -81,6 +91,7 @@ const config = {
     }
   ],
   
+  /** @type {Category[]} */
   // Các danh mục sản phẩm mặc định
   defaultCategories: [
     {
