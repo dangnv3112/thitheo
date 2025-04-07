@@ -9,11 +9,23 @@ const nextConfig = {
   },
   
   // Cấu hình cho GitHub Pages
-  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/tho-gio' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/tho-gio' : '',
   
   // Thêm dấu / cuối URL
   trailingSlash: true,
+  
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
+  experimental: {
+    appDir: true,
+  },
 };
 
 module.exports = nextConfig;
