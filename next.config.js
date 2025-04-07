@@ -7,7 +7,7 @@ const nextConfig = {
   },
   // Đặt basePath và assetPrefix cho GitHub Pages
   basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo/' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
   trailingSlash: true,
   // Bỏ qua lỗi để build thành công
   eslint: {
@@ -20,7 +20,7 @@ const nextConfig = {
   },
   // Disable server components for static export
   experimental: {
-    appDir: true,
+    // appDir đã được bật mặc định từ Next.js 13+
   }
 }
 
