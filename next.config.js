@@ -20,14 +20,6 @@ const nextConfig = {
     // Bỏ qua lỗi TypeScript trong quá trình build
     ignoreBuildErrors: true,
   },
-  experimental: {
-    appDir: true,
-  },
-  // Tùy chỉnh quá trình build
-  webpack: (config, { isServer }) => {
-    // Tùy chỉnh thêm cho webpack nếu cần
-    return config
-  },
   // Kiểm tra nếu đang chạy trong GitHub Actions
   ...(process.env.GITHUB_ACTIONS === 'true' && {
     // Đảm bảo assets được load đúng trong GitHub Pages

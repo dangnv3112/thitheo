@@ -4,11 +4,6 @@
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-// Tắt tính năng tạo trang tĩnh cho trang này
-export async function generateStaticParams() {
-  return [];
-}
-
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import Image from 'next/image';
