@@ -67,6 +67,61 @@ jobs:
           # Thêm bảo hiểm nếu cấu hình có vấn đề
           echo 'module.exports = { output: "export", trailingSlash: true, images: { unoptimized: true } };' > next.config.js.simple
           
+      - name: Create fallback HTML files
+        run: |
+          mkdir -p out
+          # Tạo index.html
+          echo '<!DOCTYPE html>' > out/index.html
+          echo '<html lang="vi">' >> out/index.html
+          echo '<head>' >> out/index.html
+          echo '  <meta charset="UTF-8">' >> out/index.html
+          echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> out/index.html
+          echo '  <title>Tho Giò - Đặc sản Huế</title>' >> out/index.html
+          echo '  <style>' >> out/index.html
+          echo '    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }' >> out/index.html
+          echo '    .container { max-width: 800px; text-align: center; padding: 2rem; }' >> out/index.html
+          echo '    h1 { color: #4a5568; margin-bottom: 1rem; }' >> out/index.html
+          echo '    p { color: #718096; margin-bottom: 1.5rem; }' >> out/index.html
+          echo '    .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }' >> out/index.html
+          echo '    .logo { width: 120px; height: 120px; margin-bottom: 2rem; }' >> out/index.html
+          echo '  </style>' >> out/index.html
+          echo '</head>' >> out/index.html
+          echo '<body>' >> out/index.html
+          echo '  <div class="container">' >> out/index.html
+          echo '    <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src=\'/thitheo/favicon.ico\'; this.onerror=null;">' >> out/index.html
+          echo '    <h1>Trang web đang được nâng cấp</h1>' >> out/index.html
+          echo '    <p>Chúng tôi đang làm việc để cải thiện trải nghiệm của bạn. Vui lòng quay lại sau.</p>' >> out/index.html
+          echo '    <a href="/" class="btn">Thử làm mới trang</a>' >> out/index.html
+          echo '  </div>' >> out/index.html
+          echo '</body>' >> out/index.html
+          echo '</html>' >> out/index.html
+          
+          # Tạo 404.html
+          echo '<!DOCTYPE html>' > out/404.html
+          echo '<html lang="vi">' >> out/404.html
+          echo '<head>' >> out/404.html
+          echo '  <meta charset="UTF-8">' >> out/404.html
+          echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">' >> out/404.html
+          echo '  <title>Tho Giò - Không tìm thấy trang</title>' >> out/404.html
+          echo '  <style>' >> out/404.html
+          echo '    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }' >> out/404.html
+          echo '    .container { max-width: 800px; text-align: center; padding: 2rem; }' >> out/404.html
+          echo '    h1 { color: #4a5568; margin-bottom: 1rem; }' >> out/404.html
+          echo '    p { color: #718096; margin-bottom: 1.5rem; }' >> out/404.html
+          echo '    .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }' >> out/404.html
+          echo '    .logo { width: 120px; height: 120px; margin-bottom: 2rem; }' >> out/404.html
+          echo '  </style>' >> out/404.html
+          echo '</head>' >> out/404.html
+          echo '<body>' >> out/404.html
+          echo '  <div class="container">' >> out/404.html
+          echo '    <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src=\'/thitheo/favicon.ico\'; this.onerror=null;">' >> out/404.html
+          echo '    <h1>Không tìm thấy trang</h1>' >> out/404.html
+          echo '    <p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>' >> out/404.html
+          echo '    <a href="/thitheo/" class="btn">Quay lại trang chủ</a>' >> out/404.html
+          echo '  </div>' >> out/404.html
+          echo '</body>' >> out/404.html
+          echo '</html>' >> out/404.html
+          
       - name: Build Next.js app
         id: build
         run: |
@@ -75,61 +130,9 @@ jobs:
             echo "::warning::Build với cấu hình hiện tại thất bại, đang thử với cấu hình đơn giản hơn..."
             cp next.config.js.simple next.config.js
             npm run build || {
-              echo "::warning::Tất cả cấu hình build thất bại, đang tạo trang dự phòng..."
-              mkdir -p out
-              cat > out/index.html << 'EOL'
-              <!DOCTYPE html>
-              <html lang="vi">
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Tho Giò - Đặc sản Huế</title>
-                <style>
-                  body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }
-                  .container { max-width: 800px; text-align: center; padding: 2rem; }
-                  h1 { color: #4a5568; margin-bottom: 1rem; }
-                  p { color: #718096; margin-bottom: 1.5rem; }
-                  .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }
-                  .logo { width: 120px; height: 120px; margin-bottom: 2rem; }
-                </style>
-              </head>
-              <body>
-                <div class="container">
-                  <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src='/thitheo/favicon.ico'; this.onerror=null;">
-                  <h1>Trang web đang được nâng cấp</h1>
-                  <p>Chúng tôi đang làm việc để cải thiện trải nghiệm của bạn. Vui lòng quay lại sau.</p>
-                  <a href="/" class="btn">Thử làm mới trang</a>
-                </div>
-              </body>
-              </html>
-              EOL
-              cat > out/404.html << 'EOL'
-              <!DOCTYPE html>
-              <html lang="vi">
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Tho Giò - Không tìm thấy trang</title>
-                <style>
-                  body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; margin: 0; padding: 0; display: flex; min-height: 100vh; justify-content: center; align-items: center; background: #f9f9f9; }
-                  .container { max-width: 800px; text-align: center; padding: 2rem; }
-                  h1 { color: #4a5568; margin-bottom: 1rem; }
-                  p { color: #718096; margin-bottom: 1.5rem; }
-                  .btn { display: inline-block; background: #3182ce; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 0.25rem; font-weight: 600; }
-                  .logo { width: 120px; height: 120px; margin-bottom: 2rem; }
-                </style>
-              </head>
-              <body>
-                <div class="container">
-                  <img src="/thitheo/images/logo.png" alt="Tho Giò Logo" class="logo" onerror="this.src='/thitheo/favicon.ico'; this.onerror=null;">
-                  <h1>Không tìm thấy trang</h1>
-                  <p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>
-                  <a href="/thitheo/" class="btn">Quay lại trang chủ</a>
-                </div>
-              </body>
-              </html>
-              EOL
-              echo "::error::Tất cả phương pháp build đều thất bại, nhưng đã tạo trang dự phòng."
+              echo "::warning::Tất cả cấu hình build thất bại, đang sử dụng trang dự phòng..."
+              # Không cần tạo file HTML vì đã được tạo ở bước trước
+              echo "::error::Tất cả phương pháp build đều thất bại, nhưng đã sẵn sàng trang dự phòng."
               # Trả về thành công để workflow tiếp tục
               exit 0
             }
