@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,6 +18,26 @@ import { getAssetPath } from '../utils/paths';
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow container mx-auto p-4 max-w-6xl">
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">Giỏ Hàng</h1>
+          <div className="text-center py-10">
+            <p>Đang tải...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
   
   // Chuẩn bị dữ liệu giỏ hàng
   const cartItems = cart.items.map(item => ({
