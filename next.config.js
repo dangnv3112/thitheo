@@ -24,7 +24,7 @@ const nextConfig = {
   },
   
   experimental: {
-    appDir: true,
+    // App directory is enabled by default in Next.js 14
   },
 };
 
