@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thỏ Giò - Đặc sản Huế</title>
+  <title>Tho Giò - Đặc sản Huế</title>
   <style>
     * {
       margin: 0;
@@ -40,6 +40,55 @@
     
     .logo {
       font-size: 1.8rem;
+      font-weight: bold;
+    }
+    
+    .navigation {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-list {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    
+    .nav-link:hover {
+      opacity: 0.8;
+    }
+    
+    .cart-btn {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      color: white;
+      margin-left: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #fff;
+      color: #ef4444;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
       font-weight: bold;
     }
     
@@ -143,8 +192,67 @@
       margin-bottom: 1rem;
     }
     
-    .about {
+    .add-to-cart {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .add-to-cart:hover {
+      background-color: #dc2626;
+    }
+    
+    .categories {
       background-color: #f2f2f2;
+      padding: 5rem 0;
+      text-align: center;
+    }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 2rem;
+    }
+    
+    .category {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 200px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .category img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .category:hover img {
+      transform: scale(1.1);
+    }
+    
+    .category-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .about {
+      background-color: #fff;
       padding: 5rem 0;
     }
     
@@ -168,6 +276,65 @@
       width: 100%;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 100;
+      overflow: auto;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .payment-details {
+      margin-top: 1.5rem;
+    }
+    
+    .bank-details {
+      background-color: #f9f9f9;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .qr-code {
+      display: block;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      background-color: #f2f2f2;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
     }
     
     footer {
@@ -213,6 +380,14 @@
       color: #aaa;
     }
     
+    .map-container {
+      height: 300px;
+      background-color: #f2f2f2;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    
     @media (max-width: 768px) {
       .about-content {
         grid-template-columns: 1fr;
@@ -225,6 +400,14 @@
       .logo {
         font-size: 1.5rem;
       }
+      
+      .nav-list {
+        display: none;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
     }
   </style>
 </head>
@@ -232,15 +415,26 @@
   <header>
     <div class="container">
       <div class="header-content">
-        <div class="logo">Thỏ Giò</div>
-        <nav>
-          <ul style="list-style: none; display: flex; gap: 20px;">
-            <li><a href="#" style="color: white; text-decoration: none;">Trang Chủ</a></li>
-            <li><a href="#products" style="color: white; text-decoration: none;">Sản Phẩm</a></li>
-            <li><a href="#about" style="color: white; text-decoration: none;">Giới Thiệu</a></li>
-            <li><a href="#contact" style="color: white; text-decoration: none;">Liên Hệ</a></li>
-          </ul>
-        </nav>
+        <div class="logo">Tho Giò</div>
+        <div class="navigation">
+          <nav>
+            <ul class="nav-list">
+              <li><a href="#" class="nav-link">Trang Chủ</a></li>
+              <li><a href="#products" class="nav-link">Sản Phẩm</a></li>
+              <li><a href="#categories" class="nav-link">Danh Mục</a></li>
+              <li><a href="#about" class="nav-link">Giới Thiệu</a></li>
+              <li><a href="#contact" class="nav-link">Liên Hệ</a></li>
+            </ul>
+          </nav>
+          <button class="cart-btn" onclick="openCart()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-count">0</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -263,6 +457,7 @@
             <h3 class="product-title">Nem Chua Huế</h3>
             <p class="product-price">135.000 đ</p>
             <p>Nem chua Huế thơm ngon, chua ngọt đặc trưng, làm từ thịt heo tươi ngon.</p>
+            <button class="add-to-cart" onclick="addToCart(1)">Thêm vào giỏ</button>
           </div>
         </div>
         <div class="product">
@@ -271,6 +466,7 @@
             <h3 class="product-title">Chả Huế Truyền Thống</h3>
             <p class="product-price">175.000 đ</p>
             <p>Chả Huế giòn thơm, được làm từ những nguyên liệu tươi ngon nhất.</p>
+            <button class="add-to-cart" onclick="addToCart(2)">Thêm vào giỏ</button>
           </div>
         </div>
         <div class="product">
@@ -279,6 +475,7 @@
             <h3 class="product-title">Mắm Tôm Chua Huế</h3>
             <p class="product-price">95.000 đ</p>
             <p>Mắm tôm chua Huế đậm đà, là gia vị không thể thiếu trong bữa ăn gia đình.</p>
+            <button class="add-to-cart" onclick="addToCart(3)">Thêm vào giỏ</button>
           </div>
         </div>
         <div class="product">
@@ -287,7 +484,32 @@
             <h3 class="product-title">Kẹo Mè Xửng</h3>
             <p class="product-price">85.000 đ</p>
             <p>Kẹo mè xửng truyền thống, thơm ngon, béo ngậy với vị ngọt dịu từ đường mật.</p>
+            <button class="add-to-cart" onclick="addToCart(4)">Thêm vào giỏ</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories" id="categories">
+    <div class="container">
+      <h2 class="section-title">Danh Mục Sản Phẩm</h2>
+      <div class="category-grid">
+        <div class="category">
+          <img src="https://images.unsplash.com/photo-1578332049773-6e53848329c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Nem - Chả">
+          <div class="category-name">Nem - Chả</div>
+        </div>
+        <div class="category">
+          <img src="https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Bánh Kẹo">
+          <div class="category-name">Bánh Kẹo</div>
+        </div>
+        <div class="category">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Gia Vị">
+          <div class="category-name">Gia Vị</div>
+        </div>
+        <div class="category">
+          <img src="https://images.unsplash.com/photo-1603436326446-74033a20a4e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Đồ Khô">
+          <div class="category-name">Đồ Khô</div>
         </div>
       </div>
     </div>
@@ -298,7 +520,7 @@
       <div class="about-content">
         <div class="about-text">
           <h2>Về Chúng Tôi</h2>
-          <p>Thỏ Giò là thương hiệu uy tín chuyên cung cấp các sản phẩm đặc sản Huế chất lượng cao đến tận tay người tiêu dùng.</p>
+          <p>Tho Giò là thương hiệu uy tín chuyên cung cấp các sản phẩm đặc sản Huế chất lượng cao đến tận tay người tiêu dùng.</p>
           <p>Với hơn 10 năm kinh nghiệm, chúng tôi tự hào mang đến những sản phẩm được chế biến theo công thức truyền thống, đảm bảo vệ sinh an toàn thực phẩm.</p>
           <p>Sứ mệnh của chúng tôi là bảo tồn và phát huy những giá trị ẩm thực truyền thống của Huế, đồng thời đem đến cho khách hàng những trải nghiệm ẩm thực tuyệt vời.</p>
         </div>
@@ -313,7 +535,7 @@
     <div class="container">
       <div class="footer-content">
         <div>
-          <h3 class="footer-heading">Thỏ Giò</h3>
+          <h3 class="footer-heading">Tho Giò</h3>
           <p>Đặc sản Huế chất lượng cao.<br>Giao hàng tận nơi trên toàn quốc.</p>
         </div>
         <div>
@@ -323,6 +545,9 @@
             <li>Điện thoại: 0123 456 789</li>
             <li>Email: info@thogio.com</li>
           </ul>
+          <div class="map-container">
+            <p style="text-align: center; padding-top: 120px;">Bản đồ Google Maps</p>
+          </div>
         </div>
         <div>
           <h3 class="footer-heading">Theo Dõi</h3>
@@ -342,9 +567,162 @@
         </div>
       </div>
       <div class="copyright">
-        <p>&copy; 2023 Thỏ Giò. Tất cả quyền được bảo lưu.</p>
+        <p>&copy; 2023 Tho Giò. Tất cả quyền được bảo lưu.</p>
       </div>
     </div>
   </footer>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closePaymentModal()">&times;</button>
+      <h2>Thông Tin Đặt Hàng</h2>
+      <p>Vui lòng chuyển khoản theo thông tin dưới đây:</p>
+      
+      <div class="payment-details">
+        <div class="bank-details">
+          <p><strong>Ngân hàng:</strong> Vietcombank</p>
+          <p><strong>Số tài khoản:</strong> 1234567890</p>
+          <p><strong>Chủ tài khoản:</strong> Công ty TNHH Tho Giò</p>
+          <p><strong>Nội dung:</strong> [Họ tên] - [Số điện thoại]</p>
+        </div>
+        
+        <div class="qr-code">
+          Mã QR thanh toán sẽ hiển thị tại đây
+        </div>
+      </div>
+      
+      <p style="margin-top: 1rem;">Sau khi chuyển khoản, vui lòng điền thông tin bên dưới để chúng tôi liên hệ xác nhận:</p>
+      
+      <form id="orderForm" style="margin-top: 1rem;">
+        <div style="margin-bottom: 1rem;">
+          <label for="name" style="display: block; margin-bottom: 0.5rem;">Họ tên:</label>
+          <input type="text" id="name" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+          <label for="phone" style="display: block; margin-bottom: 0.5rem;">Số điện thoại:</label>
+          <input type="text" id="phone" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+          <label for="address" style="display: block; margin-bottom: 0.5rem;">Địa chỉ:</label>
+          <textarea id="address" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; min-height: 80px;"></textarea>
+        </div>
+        
+        <button type="button" onclick="submitOrder()" style="background-color: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 500;">Xác Nhận Đặt Hàng</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Giỏ hàng
+    let cartItems = [];
+    let cartCount = 0;
+    
+    // Danh sách sản phẩm mẫu
+    const products = [
+      { id: 1, name: "Nem Chua Huế", price: 135000, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90" },
+      { id: 2, name: "Chả Huế Truyền Thống", price: 175000, image: "https://images.unsplash.com/photo-1603089183654-ee9d101cb392" },
+      { id: 3, name: "Mắm Tôm Chua Huế", price: 95000, image: "https://images.unsplash.com/photo-1564988252816-da63ec834579" },
+      { id: 4, name: "Kẹo Mè Xửng", price: 85000, image: "https://images.unsplash.com/photo-1515668236457-83c3b8764839" }
+    ];
+    
+    // Thêm sản phẩm vào giỏ hàng
+    function addToCart(productId) {
+      // Tìm sản phẩm trong danh sách
+      const product = products.find(p => p.id === productId);
+      
+      if (!product) return;
+      
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+      const existingItem = cartItems.find(item => item.product.id === productId);
+      
+      if (existingItem) {
+        // Tăng số lượng
+        existingItem.quantity += 1;
+      } else {
+        // Thêm sản phẩm mới
+        cartItems.push({
+          product: product,
+          quantity: 1
+        });
+      }
+      
+      // Cập nhật số lượng hiển thị
+      updateCartCount();
+      
+      // Hiển thị thông báo
+      alert(`Đã thêm ${product.name} vào giỏ hàng!`);
+    }
+    
+    // Cập nhật số lượng hiển thị
+    function updateCartCount() {
+      cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+      document.querySelector('.cart-count').textContent = cartCount;
+    }
+    
+    // Mở giỏ hàng
+    function openCart() {
+      if (cartItems.length === 0) {
+        alert("Giỏ hàng của bạn đang trống!");
+        return;
+      }
+      
+      // Trong thực tế, sẽ chuyển đến trang giỏ hàng
+      // Nhưng với demo tĩnh này, chúng ta mở modal thanh toán luôn
+      openPaymentModal();
+    }
+    
+    // Mở modal thanh toán
+    function openPaymentModal() {
+      document.getElementById('paymentModal').style.display = 'block';
+    }
+    
+    // Đóng modal thanh toán
+    function closePaymentModal() {
+      document.getElementById('paymentModal').style.display = 'none';
+    }
+    
+    // Xử lý đặt hàng
+    function submitOrder() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const address = document.getElementById('address').value;
+      
+      if (!name || !phone || !address) {
+        alert("Vui lòng điền đầy đủ thông tin!");
+        return;
+      }
+      
+      // Tính tổng tiền
+      const total = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+      
+      // Hiển thị thông báo
+      alert(`Cảm ơn bạn đã đặt hàng!
+      
+Họ tên: ${name}
+Số điện thoại: ${phone}
+Địa chỉ: ${address}
+Tổng tiền: ${total.toLocaleString('vi-VN')} đ
+
+Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất!`);
+      
+      // Đóng modal
+      closePaymentModal();
+      
+      // Xóa giỏ hàng
+      cartItems = [];
+      updateCartCount();
+    }
+    
+    // Đóng modal khi click bên ngoài
+    window.onclick = function(event) {
+      const modal = document.getElementById('paymentModal');
+      if (event.target === modal) {
+        closePaymentModal();
+      }
+    }
+  </script>
 </body>
 </html> 

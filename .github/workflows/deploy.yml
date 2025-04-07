@@ -22,12 +22,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Create static site
+      - name: Create static site directory
         run: |
           mkdir -p out
           cp static-index.html out/index.html
           
-          # Create a simple 404 page
+          # Tạo thư mục hình ảnh
+          mkdir -p out/images/products
+          
+          # Tạo file 404 đơn giản
           cat > out/404.html << EOF
           <!DOCTYPE html>
           <html>
@@ -52,7 +55,7 @@ jobs:
           </body>
           </html>
           EOF
-          
+
       - name: Check output directory
         run: ls -la out/
           
