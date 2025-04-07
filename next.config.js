@@ -6,8 +6,8 @@ const nextConfig = {
     unoptimized: true,
   },
   // Đặt basePath và assetPrefix cho GitHub Pages
-  basePath: '/thitheo',
-  assetPrefix: '/thitheo',
+  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo/' : '',
   trailingSlash: true,
   // Bỏ qua lỗi để build thành công
   eslint: {
@@ -19,7 +19,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Disable server components for static export
-  experimental: {}
+  experimental: {
+    appDir: true,
+  }
 }
 
 module.exports = nextConfig

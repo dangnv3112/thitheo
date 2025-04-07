@@ -1,4 +1,4 @@
-name: Deploy Static Site to GitHub Pages
+name: Deploy Next.js App to GitHub Pages
 
 on:
   push:
@@ -17,45 +17,46 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
       
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Create static site directory
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
         run: |
-          mkdir -p out
-          cp static-index.html out/index.html
+          npm ci
+          # Cài đặt sharp cho xử lý hình ảnh tối ưu
+          npm install sharp --force
+        
+      - name: Clean build directory
+        run: |
+          rm -rf .next
+          rm -rf out
+        
+      - name: Build Next.js app
+        run: |
+          echo "Bắt đầu xây dựng ứng dụng Next.js..."
+          npm run build
           
-          # Tạo thư mục hình ảnh
+      - name: Copy static assets
+        run: |
+          echo "Đang sao chép các tài nguyên tĩnh..."
+          # Đảm bảo thư mục hình ảnh được sao chép đúng cách
+          mkdir -p out/images
+          cp -r public/images out/
           mkdir -p out/images/products
+          mkdir -p out/images/categories
+          mkdir -p out/images/banner
+          touch out/.nojekyll
           
-          # Tạo file 404 đơn giản
-          cat > out/404.html << EOF
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>404 - Không tìm thấy trang</title>
-            <style>
-              body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f9fafb; }
-              .content { text-align: center; max-width: 400px; padding: 2rem; }
-              h1 { color: #1f2937; margin-bottom: 1rem; }
-              a { color: #ef4444; text-decoration: none; }
-              a:hover { text-decoration: underline; }
-            </style>
-          </head>
-          <body>
-            <div class="content">
-              <h1>404 - Không tìm thấy trang</h1>
-              <p>Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.</p>
-              <p><a href="/thitheo/">Quay lại trang chủ</a></p>
-            </div>
-          </body>
-          </html>
-          EOF
-
       - name: Check output directory
         run: ls -la out/
           
