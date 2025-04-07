@@ -1,8 +1,37 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import dynamic from 'next/dynamic';
 import { getAssetPath } from '../utils/paths';
+
+// Dynamic import Google Maps components to prevent client-side errors
+const GoogleMapModule = dynamic(
+  () => import('@react-google-maps/api').then(mod => ({ 
+    default: mod.GoogleMap 
+  })),
+  { ssr: false }
+);
+
+const LoadScriptModule = dynamic(
+  () => import('@react-google-maps/api').then(mod => ({ 
+    default: mod.LoadScript 
+  })),
+  { ssr: false }
+);
+
+const MarkerModule = dynamic(
+  () => import('@react-google-maps/api').then(mod => ({ 
+    default: mod.Marker 
+  })),
+  { ssr: false }
+);
+
+const InfoWindowModule = dynamic(
+  () => import('@react-google-maps/api').then(mod => ({ 
+    default: mod.InfoWindow 
+  })),
+  { ssr: false }
+);
 
 // Thông tin cửa hàng Tho Giò
 const storeLocations = [
@@ -43,12 +72,16 @@ export default function Map() {
   const [selectedStore, setSelectedStore] = useState<number | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
+    // Kiểm tra xem đang ở môi trường browser
+    setIsBrowser(typeof window !== 'undefined');
+    
     // Thêm độ trễ trước khi hiển thị bản đồ để tránh vấn đề bố cục
     const timer = setTimeout(() => {
       setMapLoaded(true);
-    }, 500);
+    }, 1000);
     
     return () => clearTimeout(timer);
   }, []);
@@ -64,28 +97,27 @@ export default function Map() {
     console.log('Google Maps loaded successfully');
   };
 
-  // Nếu có lỗi khi tải Google Maps, hiển thị giao diện dự phòng
-  if (loadError) {
-    return (
-      <div className="w-full min-h-[500px] flex flex-col items-center justify-center bg-gray-100 p-4 rounded-lg">
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-          <h3 className="font-bold text-red-700 mb-4 text-center text-xl">Các Cửa Hàng Tho Giò</h3>
-          
-          {storeLocations.map(store => (
-            <div key={store.id} className="mb-4 p-4 border-b border-gray-200 last:border-b-0">
-              <h4 className="font-semibold text-lg">{store.name}</h4>
-              <p className="text-sm my-1">{store.address}</p>
-              <p className="text-sm">SĐT: {store.phone}</p>
-              <p className="text-sm">Giờ mở cửa: {store.hours}</p>
-            </div>
-          ))}
-          
-          <div className="mt-4 p-3 bg-red-50 rounded text-center text-sm text-red-700">
-            <p>Bản đồ không thể tải. Vui lòng kiểm tra kết nối internet của bạn.</p>
+  // Fallback UI - hiển thị khi không thể tải Google Maps hoặc ở server-side
+  const FallbackUI = () => (
+    <div className="w-full min-h-[500px] flex flex-col items-center justify-center bg-gray-100 p-4 rounded-lg">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <h3 className="font-bold text-red-700 mb-4 text-center text-xl">Các Cửa Hàng Tho Giò</h3>
+        
+        {storeLocations.map(store => (
+          <div key={store.id} className="mb-4 p-4 border-b border-gray-200 last:border-b-0">
+            <h4 className="font-semibold text-lg">{store.name}</h4>
+            <p className="text-sm my-1">{store.address}</p>
+            <p className="text-sm">SĐT: {store.phone}</p>
+            <p className="text-sm">Giờ mở cửa: {store.hours}</p>
           </div>
-        </div>
+        ))}
       </div>
-    );
+    </div>
+  );
+
+  // Nếu có lỗi khi tải Google Maps hoặc không phải browser, hiển thị giao diện dự phòng
+  if (loadError || !isBrowser) {
+    return <FallbackUI />;
   }
 
   // Nếu đang tải bản đồ, hiển thị loading
@@ -100,60 +132,70 @@ export default function Map() {
     );
   }
 
-  // Hiển thị bản đồ Google Maps
-  return (
-    <div className="w-full rounded-lg overflow-hidden shadow-md">
-      <LoadScript
-        googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-        onError={handleLoadError}
-        onLoad={handleMapLoad}
-      >
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={center}
-          zoom={13}
-          options={{
-            zoomControl: true,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: true,
-          }}
+  // Sử dụng try-catch để bắt lỗi khi render Google Maps
+  try {
+    // Hiển thị bản đồ Google Maps
+    return (
+      <div className="w-full rounded-lg overflow-hidden shadow-md">
+        <LoadScriptModule
+          id="google-map-script"
+          googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+          onError={handleLoadError}
+          onLoad={handleMapLoad}
         >
-          {storeLocations.map((store) => (
-            <Marker
-              key={store.id}
-              position={store.position}
-              onClick={() => setSelectedStore(store.id)}
-              icon={{
-                url: getAssetPath('/images/map-marker.svg'),
-                scaledSize: new window.google.maps.Size(40, 40),
-              }}
-            />
-          ))}
+          <GoogleMapModule
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={13}
+            options={{
+              zoomControl: true,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: true,
+            }}
+          >
+            {storeLocations.map((store) => (
+              <MarkerModule
+                key={store.id}
+                // @ts-ignore - TS error with dynamic imports
+                position={store.position}
+                onClick={() => setSelectedStore(store.id)}
+                icon={{
+                  url: getAssetPath('/images/map-marker.svg'),
+                  // @ts-ignore - TS error with dynamic imports
+                  scaledSize: new window.google.maps.Size(40, 40),
+                }}
+              />
+            ))}
 
-          {selectedStore !== null && (
-            <InfoWindow
-              position={storeLocations.find(store => store.id === selectedStore)?.position}
-              onCloseClick={() => setSelectedStore(null)}
-            >
-              <div className="p-3 max-w-xs">
-                <h3 className="font-bold text-red-700 mb-2">
-                  {storeLocations.find(store => store.id === selectedStore)?.name}
-                </h3>
-                <p className="text-sm mb-1">
-                  {storeLocations.find(store => store.id === selectedStore)?.address}
-                </p>
-                <p className="text-sm mb-1">
-                  SĐT: {storeLocations.find(store => store.id === selectedStore)?.phone}
-                </p>
-                <p className="text-sm">
-                  Giờ mở cửa: {storeLocations.find(store => store.id === selectedStore)?.hours}
-                </p>
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      </LoadScript>
-    </div>
-  );
+            {selectedStore !== null && (
+              <InfoWindowModule
+                // @ts-ignore - TS error with dynamic imports
+                position={storeLocations.find(store => store.id === selectedStore)?.position}
+                onCloseClick={() => setSelectedStore(null)}
+              >
+                <div className="p-3 max-w-xs">
+                  <h3 className="font-bold text-red-700 mb-2">
+                    {storeLocations.find(store => store.id === selectedStore)?.name}
+                  </h3>
+                  <p className="text-sm mb-1">
+                    {storeLocations.find(store => store.id === selectedStore)?.address}
+                  </p>
+                  <p className="text-sm mb-1">
+                    SĐT: {storeLocations.find(store => store.id === selectedStore)?.phone}
+                  </p>
+                  <p className="text-sm">
+                    Giờ mở cửa: {storeLocations.find(store => store.id === selectedStore)?.hours}
+                  </p>
+                </div>
+              </InfoWindowModule>
+            )}
+          </GoogleMapModule>
+        </LoadScriptModule>
+      </div>
+    );
+  } catch (error) {
+    console.error('Error rendering Google Maps:', error);
+    return <FallbackUI />;
+  }
 }

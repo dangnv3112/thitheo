@@ -279,8 +279,8 @@ export default function ProductsPage() {
                 
                 return (
                   <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <Link href={`/products/${product.id}`}>
-                      <div className="relative h-48 w-full">
+                    <Link href={`/products/${product.id}`} className="block">
+                      <div className="relative h-48 w-full overflow-hidden">
                         {imageError[product.id] ? (
                           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
                             <FaSearch className="text-gray-400 text-5xl" />
@@ -290,7 +290,7 @@ export default function ProductsPage() {
                             src={product.image || '/images/products/product-placeholder.svg'}
                             alt={product.name}
                             fill
-                            className="object-contain p-4"
+                            className="object-contain p-4 hover:scale-105 transition-transform duration-300"
                             onError={() => handleImageError(product.id)}
                             unoptimized={true}
                           />
@@ -330,7 +330,11 @@ export default function ProductsPage() {
                         <button 
                           className={`p-2 rounded-full ${product.inStock ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
                           disabled={!product.inStock}
-                          onClick={(e) => product.inStock && handleAddToCart(e, product)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            product.inStock && handleAddToCart(e, product);
+                          }}
                         >
                           <FaCartPlus size={18} />
                         </button>

@@ -194,13 +194,13 @@ export default function FeaturedProducts() {
           const displayPrice = hasDiscount ? (product.discountPrice as number) : product.price;
           
           return (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
               <Link href={`/products/${product.id}`} className="block relative">
                 <div className="relative w-full pb-[75%] overflow-hidden">
                   <img
                     src={getProductImagePath(product.image.split('?')[0])}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
+                    className="absolute inset-0 w-full h-full object-cover rounded-t-lg group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       console.log(`[FeaturedProducts] Image error for ${product.name}`);
@@ -256,7 +256,10 @@ export default function FeaturedProducts() {
                 </div>
                 
                 <button
-                  onClick={() => handleAddToCart(product)}
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent navigating to product detail
+                    handleAddToCart(product);
+                  }}
                   className="w-full py-2 bg-red-600 text-white rounded flex items-center justify-center hover:bg-red-700 transition"
                 >
                   <FaShoppingCart className="mr-2" />

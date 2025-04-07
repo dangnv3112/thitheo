@@ -15,14 +15,12 @@ interface PaymentModalProps {
 export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: PaymentModalProps) {
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState({
     customerName: '',
     phone: '',
-    address: '',
   });
 
   // Hỗ trợ tùy chọn Escape để đóng modal
@@ -55,13 +53,12 @@ export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: 
     setTimeout(() => setCopied(false), 3000);
   };
 
-  // Xác thực form
+  // Xác thực form - đơn giản hóa kiểm tra
   const validateForm = () => {
     let valid = true;
     const newErrors = {
       customerName: '',
       phone: '',
-      address: '',
     };
 
     if (!customerName.trim()) {
@@ -71,14 +68,6 @@ export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: 
 
     if (!phone.trim()) {
       newErrors.phone = 'Vui lòng nhập số điện thoại';
-      valid = false;
-    } else if (!/^[0-9]{10,11}$/.test(phone.trim())) {
-      newErrors.phone = 'Số điện thoại không hợp lệ';
-      valid = false;
-    }
-
-    if (!address.trim()) {
-      newErrors.address = 'Vui lòng nhập địa chỉ giao hàng';
       valid = false;
     }
 
@@ -95,7 +84,6 @@ export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: 
       onSubmitOrder({
         customerName,
         phone,
-        email,
         address,
         note,
         total,
@@ -126,7 +114,7 @@ export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: 
         
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Thông tin đặt hàng */}
+            {/* Thông tin đặt hàng - đơn giản hóa form */}
             <div>
               <h3 className="text-xl font-semibold mb-4">Thông tin giao hàng</h3>
               
@@ -168,34 +156,16 @@ export default function PaymentModal({ isOpen, onClose, total, onSubmitOrder }: 
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2" htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-                
-                <div className="mb-4">
                   <label className="block text-gray-700 mb-2" htmlFor="address">
-                    Địa chỉ giao hàng <span className="text-red-600">*</span>
+                    Địa chỉ giao hàng
                   </label>
                   <textarea
                     id="address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${
-                      errors.address ? 'border-red-500' : 'border-gray-300'
-                    }`}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                     rows={3}
                   ></textarea>
-                  {errors.address && (
-                    <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-                  )}
                 </div>
                 
                 <div className="mb-4">
