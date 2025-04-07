@@ -35,8 +35,10 @@ jobs:
       
       - name: Build website
         run: |
+          # Đảm bảo next.config.js không có output: 'export'
+          echo "Bắt đầu quá trình build"
           # Thử build dự án
-          npm run build
+          npm run build && npx next export -o out
           
           # Kiểm tra xem thư mục out có tồn tại và có nội dung không
           if [ ! -d "./out" ] || [ -z "$(ls -A ./out)" ]; then

@@ -1,5 +1,8 @@
 'use client';
 
+// Add this for dynamic rendering - no static prerendering
+export const dynamic = 'force-dynamic';
+
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import Image from 'next/image';
@@ -13,27 +16,27 @@ export default function CartPage() {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   
-  // Tính tổng giá trị giỏ hàng
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  
   // Chuẩn bị dữ liệu giỏ hàng
-  const cartItems = cart.map(item => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
+  const cartItems = cart.items.map(item => ({
+    id: item.product.id,
+    name: item.product.name,
+    price: item.product.discountPrice || item.product.price,
     quantity: item.quantity,
-    image: item.image
+    image: item.product.image
   }));
   
+  // Lấy tổng giá trị từ cart context
+  const totalPrice = cart.total;
+  
   const handleIncreaseQuantity = (id: number) => {
-    const item = cart.find(item => item.id === id);
+    const item = cart.items.find(item => item.product.id === id);
     if (item) {
       updateQuantity(id, item.quantity + 1);
     }
   };
   
   const handleDecreaseQuantity = (id: number) => {
-    const item = cart.find(item => item.id === id);
+    const item = cart.items.find(item => item.product.id === id);
     if (item && item.quantity > 1) {
       updateQuantity(id, item.quantity - 1);
     }
