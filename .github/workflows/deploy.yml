@@ -29,11 +29,38 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install dependencies
+      - name: Clean install dependencies
         run: |
-          npm install --legacy-peer-deps
-          npm install tailwindcss postcss autoprefixer --save-dev
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install
+      
+      - name: Install TailwindCSS and related packages
+        run: |
+          npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+          npm install -D @tailwindcss/forms @tailwindcss/typography
+          
+      - name: Install sharp for image optimization
+        run: |
           npm install sharp --force
+          
+      - name: Verify TailwindCSS installation
+        run: |
+          npx tailwindcss --help
+          ls -la node_modules/tailwindcss
+          cat package.json
+          
+      - name: Create necessary config files if missing
+        run: |
+          if [ ! -f "postcss.config.js" ]; then
+            echo "Creating postcss.config.js"
+            echo "module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }" > postcss.config.js
+          fi
+          
+          if [ ! -f "tailwind.config.js" ]; then
+            echo "Creating tailwind.config.js"
+            npx tailwindcss init
+          fi
         
       - name: Build Next.js app
         run: |
