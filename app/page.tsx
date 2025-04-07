@@ -10,6 +10,24 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import CategoryGrid from "./components/CategoryGrid";
 
 export default function Home() {
+  const [isMaintenanceMode] = useState(true);
+
+  if (isMaintenanceMode) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+        <div className="text-center max-w-lg">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Website đang bảo trì</h1>
+          <p className="text-gray-600 mb-6">Vui lòng quay lại sau.</p>
+          <div className="w-16 h-1 bg-red-500 mx-auto mb-6"></div>
+          <p className="text-sm text-gray-500">
+            Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.
+            <br />Xin lỗi vì sự bất tiện này.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Banner />
