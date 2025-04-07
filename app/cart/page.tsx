@@ -1,211 +1,179 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { FaTrash, FaMinus, FaPlus, FaArrowLeft } from 'react-icons/fa';
-import { formatCurrency } from '../utils/format';
+import Image from 'next/image';
+import Link from 'next/link';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import PaymentModal from '../components/PaymentModal';
 
 export default function CartPage() {
-  const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
-  const [mounted, setMounted] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const { cart, updateQuantity, removeFromCart } = useCart();
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   
-  // Tránh hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Tính tổng giá trị giỏ hàng
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   
-  if (!mounted) {
-    return null;
-  }
+  // Chuẩn bị dữ liệu giỏ hàng
+  const cartItems = cart.map(item => ({
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    quantity: item.quantity,
+    image: item.image
+  }));
   
-  // Xử lý khi người dùng đặt hàng
-  const handleOrderSubmit = (orderData: any) => {
-    // Kết hợp thông tin đơn hàng với thông tin giỏ hàng
-    const completeOrder = {
-      ...orderData,
-      items: cart.items.map(item => ({
-        id: item.product.id,
-        name: item.product.name,
-        price: item.product.discountPrice || item.product.price,
-        quantity: item.quantity,
-        totalPrice: (item.product.discountPrice || item.product.price) * item.quantity
-      }))
-    };
-    
-    console.log('Order submitted:', completeOrder);
-    
-    // TODO: Gửi đơn hàng đến Google Sheets hoặc API
-    
-    // Xóa giỏ hàng sau khi đặt hàng thành công
-    clearCart();
+  const handleIncreaseQuantity = (id: number) => {
+    const item = cart.find(item => item.id === id);
+    if (item) {
+      updateQuantity(id, item.quantity + 1);
+    }
   };
   
-  // Nếu giỏ hàng trống
-  if (cart.items.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8 text-center">Giỏ Hàng</h1>
-        <div className="bg-white p-8 rounded shadow-md max-w-2xl mx-auto text-center">
-          <p className="text-lg mb-6">Giỏ hàng của bạn đang trống.</p>
-          <Link 
-            href="/products" 
-            className="bg-red-600 text-white px-6 py-3 rounded-lg inline-flex items-center hover:bg-red-700 transition"
-          >
-            <FaArrowLeft className="mr-2" />
-            Tiếp tục mua sắm
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  const handleDecreaseQuantity = (id: number) => {
+    const item = cart.find(item => item.id === id);
+    if (item && item.quantity > 1) {
+      updateQuantity(id, item.quantity - 1);
+    }
+  };
+  
+  const openPaymentModal = () => {
+    setIsPaymentModalOpen(true);
+  };
+  
+  const closePaymentModal = () => {
+    setIsPaymentModalOpen(false);
+  };
   
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Giỏ Hàng</h1>
+    <div className="min-h-screen flex flex-col">
+      <Header />
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Danh sách sản phẩm */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sản phẩm</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Số lượng</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thành tiền</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {cart.items.map((item) => {
-                  const price = item.product.discountPrice || item.product.price;
-                  const totalPrice = price * item.quantity;
-                  
-                  return (
-                    <tr key={item.product.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 relative">
-                            <Image
-                              src={item.product.image}
-                              alt={item.product.name}
-                              fill
-                              className="object-cover object-center"
-                            />
-                          </div>
-                          <div className="ml-4">
-                            <Link 
-                              href={`/products/${item.product.id}`}
-                              className="text-lg font-medium text-gray-900 hover:text-red-600"
-                            >
-                              {item.product.name}
-                            </Link>
-                            <p className="mt-1 text-sm text-gray-500">{item.product.unit}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-900">
-                              {formatCurrency(price)}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center justify-center">
-                          <button 
-                            onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="p-2 rounded-full text-gray-600 hover:bg-gray-100"
-                          >
-                            <FaMinus size={14} />
-                          </button>
-                          <span className="mx-3 w-8 text-center">{item.quantity}</span>
-                          <button 
-                            onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="p-2 rounded-full text-gray-600 hover:bg-gray-100"
-                          >
-                            <FaPlus size={14} />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        {formatCurrency(totalPrice)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button 
-                          onClick={() => removeFromCart(item.product.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          
-          <div className="mt-4 flex justify-between">
-            <Link
-              href="/products"
-              className="flex items-center text-red-600 hover:text-red-700"
-            >
-              <FaArrowLeft className="mr-2" />
+      <main className="flex-grow container mx-auto p-4 max-w-6xl">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center md:text-left">Giỏ Hàng</h1>
+        
+        {cartItems.length === 0 ? (
+          <div className="text-center py-10">
+            <div className="w-24 h-24 mx-auto mb-4 text-gray-300">
+              <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 6h-4c0-2.76-2.24-5-5-5S7 3.24 7 6H3c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zm-9-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.76 0-5-2.24-5-5h2c0 1.66 1.34 3 3 3s3-1.34 3-3h2c0 2.76-2.24 5-5 5z" />
+              </svg>
+            </div>
+            <p className="text-lg text-gray-600 mb-4">Giỏ hàng của bạn đang trống</p>
+            <Link href="/products" className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg">
               Tiếp tục mua sắm
             </Link>
-            
-            <button
-              onClick={clearCart}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              Xóa giỏ hàng
-            </button>
           </div>
-        </div>
-        
-        {/* Tóm tắt đơn hàng */}
-        <div className="lg:col-span-1">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-medium text-gray-900 border-b pb-4">Tóm Tắt Đơn Hàng</h2>
-            
-            <div className="mt-6 space-y-4">
-              <div className="flex justify-between">
-                <p className="text-gray-600">Tạm tính</p>
-                <p className="font-medium">{formatCurrency(cart.total)}</p>
-              </div>
-              
-              <div className="flex justify-between">
-                <p className="text-gray-600">Phí vận chuyển</p>
-                <p className="font-medium">Miễn phí</p>
-              </div>
-              
-              <div className="border-t pt-4 flex justify-between items-center">
-                <p className="text-lg font-medium">Tổng cộng</p>
-                <p className="text-xl font-bold text-red-600">{formatCurrency(cart.total)}</p>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="p-4 border-b">
+                  <h2 className="text-xl font-semibold">Sản phẩm</h2>
+                </div>
+                
+                <div className="divide-y">
+                  {cartItems.map((item) => (
+                    <div key={item.id} className="p-4 flex flex-col sm:flex-row items-center">
+                      <div className="w-full sm:w-24 h-24 mb-4 sm:mb-0 flex-shrink-0">
+                        <div className="relative w-24 h-24 mx-auto">
+                          <Image
+                            src={item.image || '/images/products/product-placeholder.svg'}
+                            alt={item.name}
+                            fill
+                            sizes="96px"
+                            className="object-cover rounded-md"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/images/products/product-placeholder.svg';
+                            }}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex-grow ml-0 sm:ml-4 text-center sm:text-left">
+                        <h3 className="font-medium">{item.name}</h3>
+                        <p className="text-gray-600 text-sm mt-1">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center mt-4 sm:mt-0">
+                        <button
+                          onClick={() => handleDecreaseQuantity(item.id)}
+                          className="w-8 h-8 flex items-center justify-center border rounded"
+                        >
+                          <FaMinus size={12} />
+                        </button>
+                        <span className="w-10 text-center">{item.quantity}</span>
+                        <button
+                          onClick={() => handleIncreaseQuantity(item.id)}
+                          className="w-8 h-8 flex items-center justify-center border rounded"
+                        >
+                          <FaPlus size={12} />
+                        </button>
+                      </div>
+                      
+                      <div className="mt-4 sm:mt-0 sm:ml-6 text-right">
+                        <p className="font-semibold">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity)}
+                        </p>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-red-500 mt-1 hover:text-red-700"
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             
-            <button
-              onClick={() => setShowPaymentModal(true)}
-              className="mt-6 w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 transition"
-            >
-              Đặt Hàng
-            </button>
-            
-            <div className="mt-4 text-sm text-gray-500">
-              <p>* Giá đã bao gồm VAT</p>
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-lg shadow-md p-4">
+                <h2 className="text-xl font-semibold mb-4">Tóm tắt đơn hàng</h2>
+                
+                <div className="border-t border-b py-4 mb-4">
+                  <div className="flex justify-between mb-2">
+                    <span>Tạm tính</span>
+                    <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Phí vận chuyển</span>
+                    <span>Miễn phí</span>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between font-semibold text-lg mb-6">
+                  <span>Tổng cộng</span>
+                  <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice)}</span>
+                </div>
+                
+                <button
+                  onClick={openPaymentModal}
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  Đặt Hàng
+                </button>
+                
+                <Link href="/products" className="w-full block text-center mt-4 text-blue-600">
+                  Tiếp tục mua sắm
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Payment Modal */}
-      <PaymentModal 
-        isOpen={showPaymentModal} 
-        onClose={() => setShowPaymentModal(false)} 
-        total={cart.total}
-        onSubmitOrder={handleOrderSubmit}
+        )}
+      </main>
+      
+      <Footer />
+      
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={closePaymentModal}
       />
     </div>
   );
