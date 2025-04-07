@@ -21,15 +21,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Disable server components for static export
-  experimental: {
-    serverActions: false
-  },
-  // Kiểm tra nếu đang chạy trong GitHub Actions
-  ...(process.env.GITHUB_ACTIONS === 'true' && {
-    // Đảm bảo assets được load đúng trong GitHub Pages
-    basePath: '/thitheo',
-    assetPrefix: '/thitheo',
-  }),
+  experimental: {}
 }
 
 module.exports = nextConfig

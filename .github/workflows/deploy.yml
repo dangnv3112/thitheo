@@ -32,8 +32,17 @@ jobs:
           
       - name: Install dependencies
         run: |
-          npm ci
+          npm ci || npm install
+          npm install -D tailwindcss postcss autoprefixer @tailwindcss/forms @tailwindcss/typography
           npm install sharp
+          
+      - name: Debug dependencies
+        run: |
+          echo "Checking installed dependencies:"
+          npm list tailwindcss
+          npm list postcss
+          npm list autoprefixer
+          ls -la node_modules/tailwindcss
           
       - name: Build
         run: |
