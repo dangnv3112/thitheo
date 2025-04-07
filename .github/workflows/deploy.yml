@@ -35,10 +35,9 @@ jobs:
       
       - name: Build website
         run: |
-          # Đảm bảo next.config.js không có output: 'export'
           echo "Bắt đầu quá trình build"
-          # Thử build dự án
-          npm run build && npx next export -o out
+          # Build dự án - sử dụng cấu hình từ next.config.js
+          npm run build
           
           # Kiểm tra xem thư mục out có tồn tại và có nội dung không
           if [ ! -d "./out" ] || [ -z "$(ls -A ./out)" ]; then
@@ -49,7 +48,7 @@ jobs:
             echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tho Giò - Website đang bảo trì</title><style>body{font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background-color:#f9fafb}.maintenance{text-align:center;max-width:400px;padding:2rem}.maintenance h1{color:#1f2937;margin-bottom:1rem}.maintenance p{color:#4b5563;margin-bottom:1.5rem}.divider{width:64px;height:4px;background-color:#ef4444;margin:0 auto 1.5rem}</style></head><body><div class="maintenance"><h1>Website đang bảo trì</h1><p>Vui lòng quay lại sau.</p><div class="divider"></div><p style="font-size:0.875rem;color:#6b7280">Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.<br>Xin lỗi vì sự bất tiện này.</p></div></body></html>' > out/index.html
             
             # Tạo trang 404 đơn giản
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Không tìm thấy trang</title><style>body{font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background-color:#f9fafb}.not-found{text-align:center;max-width:400px;padding:2rem}.not-found h1{color:#1f2937;margin-bottom:1rem}.not-found a{color:#ef4444;text-decoration:none}</style></head><body><div class="not-found"><h1>404 - Không tìm thấy trang</h1><p><a href="/">Quay lại trang chủ</a></p></div></body></html>' > out/404.html
+            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Không tìm thấy trang</title><style>body{font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background-color:#f9fafb}.not-found{text-align:center;max-width:400px;padding:2rem}.not-found h1{color:#1f2937;margin-bottom:1rem}.not-found a{color:#ef4444;text-decoration:none}</style></head><body><div class="not-found"><h1>404 - Không tìm thấy trang</h1><p><a href="/thitheo/">Quay lại trang chủ</a></p></div></body></html>' > out/404.html
             
             # Sao chép các assets cần thiết nếu có
             if [ -d "./public" ]; then

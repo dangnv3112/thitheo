@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove the output: 'export' to enable server-side rendering
-  // output: 'export',
+  // Bật lại output: 'export' để tạo bản build tĩnh
+  output: 'export',
   images: {
     unoptimized: true,
   },
-  // Đặt basePath chỉ trong môi trường production, trong development để trống
-  basePath: '',
-  assetPrefix: '',
+  // Đặt basePath và assetPrefix cho GitHub Pages
+  basePath: '/thitheo',
+  assetPrefix: '/thitheo',
   trailingSlash: true,
   // Chỉ định các thư mục cần được sao chép từ public vào thư mục output
   distDir: 'out',
@@ -28,7 +28,8 @@ const nextConfig = {
   // Kiểm tra nếu đang chạy trong GitHub Actions
   ...(process.env.GITHUB_ACTIONS === 'true' && {
     // Đảm bảo assets được load đúng trong GitHub Pages
-    assetPrefix: '',
+    basePath: '/thitheo',
+    assetPrefix: '/thitheo',
   }),
 }
 
