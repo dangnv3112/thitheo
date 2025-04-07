@@ -1,11 +1,13 @@
 'use client';
 
 // Đánh dấu trang này là không tĩnh, không cần pre-render trong quá trình build
-export const dynamic = 'error';
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
-// Thêm cấu hình cho export tĩnh (static export)
-export const dynamicParams = false;
-export const revalidate = 0;
+// Tắt tính năng tạo trang tĩnh cho trang này
+export async function generateStaticParams() {
+  return [];
+}
 
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';

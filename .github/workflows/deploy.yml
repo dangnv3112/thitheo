@@ -17,171 +17,57 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
-      - name: Setup Node.js
+        
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
-      
+          node-version: "20"
+          
       - name: Install dependencies
-        run: npm ci || npm install
-      
-      - name: Create output directory
-        run: mkdir -p out
-      
-      - name: Build website
         run: |
-          echo "Bắt đầu quá trình build"
+          npm install
+          # Install sharp if needed for image optimization
+          if ! npm list sharp >/dev/null 2>&1; then
+            npm install sharp
+          fi
           
-          # Build dự án với cờ --no-lint để bỏ qua lỗi lint
-          npm run build || true
+      - name: Clean build directory
+        run: |
+          rm -rf .next out
+          mkdir -p out
           
-          # Ngay cả khi build gặp lỗi, vẫn kiểm tra nếu có nội dung đã build được
-          if [ -d "./out" ] && [ -n "$(ls -A ./out)" ]; then
-            echo "Build completed with content in output directory"
-            ls -la ./out
-          else
-            echo "Creating fallback content due to build errors"
+      - name: Build application
+        run: |
+          echo "Starting build process..."
+          npm run build || {
+            echo "Build failed, creating fallback content..."
             mkdir -p out
-            
-            # Tạo trang chủ đơn giản
-            cat > out/index.html << 'EOL'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tho Giò - Website đang bảo trì</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f9fafb;
-    }
-    .maintenance {
-      text-align: center;
-      max-width: 400px;
-      padding: 2rem;
-    }
-    .maintenance h1 {
-      color: #1f2937;
-      margin-bottom: 1rem;
-    }
-    .maintenance p {
-      color: #4b5563;
-      margin-bottom: 1.5rem;
-    }
-    .divider {
-      width: 64px;
-      height: 4px;
-      background-color: #ef4444;
-      margin: 0 auto 1.5rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="maintenance">
-    <h1>Website đang bảo trì</h1>
-    <p>Vui lòng quay lại sau.</p>
-    <div class="divider"></div>
-    <p style="font-size:0.875rem;color:#6b7280">Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.<br>Xin lỗi vì sự bất tiện này.</p>
-  </div>
-</body>
-</html>
-EOL
-            
-            # Tạo trang 404 đơn giản
-            cat > out/404.html << 'EOL'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Không tìm thấy trang</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f9fafb;
-    }
-    .not-found {
-      text-align: center;
-      max-width: 400px;
-      padding: 2rem;
-    }
-    .not-found h1 {
-      color: #1f2937;
-      margin-bottom: 1rem;
-    }
-    .not-found a {
-      color: #ef4444;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="not-found">
-    <h1>404 - Không tìm thấy trang</h1>
-    <p><a href="/thitheo/">Quay lại trang chủ</a></p>
-  </div>
-</body>
-</html>
-EOL
-          fi
-      
-      - name: Ensure images and data files are copied to the output
-        run: |
-          # Đảm bảo hình ảnh và dữ liệu được copy đến đúng vị trí
-          if [ -d "./public" ]; then
-            # Copy nội dung từ public vào out
-            cp -r public/* out/ || true
-            echo "Copied public directory content to output"
-          fi
+            # Create fallback pages for dynamic routes
+            node -e '
+              const fs = require("fs");
+              const path = require("path");
+              const { DYNAMIC_ROUTES, createFallbackHtml } = require("./app/config/dynamic-routes");
+              
+              DYNAMIC_ROUTES.forEach(route => {
+                const dir = path.join("out", route.slice(1));
+                fs.mkdirSync(dir, { recursive: true });
+                fs.writeFileSync(path.join(dir, "index.html"), createFallbackHtml(route));
+              });
+            '
+          }
           
-          # Đảm bảo các thư mục images và data có trong out
-          mkdir -p out/images/categories
+      - name: Copy static assets
+        run: |
+          cp -r public/* out/ || true
           mkdir -p out/images/products
           mkdir -p out/data
           
-          # Tạo một trang fallback cho cart
-          mkdir -p out/cart
-          cat > out/cart/index.html << 'EOL'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giỏ hàng - Tho Giò</title>
-  <meta http-equiv="refresh" content="0;url=/thitheo/">
-  <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      text-align: center;
-      padding: 2rem;
-    }
-  </style>
-</head>
-<body>
-  <p>Đang chuyển hướng đến trang chủ...</p>
-  <script>
-    window.location.href = "/thitheo/";
-  </script>
-</body>
-</html>
-EOL
-      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

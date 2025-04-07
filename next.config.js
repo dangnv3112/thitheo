@@ -6,8 +6,8 @@ const nextConfig = {
     unoptimized: true,
   },
   // Đặt basePath và assetPrefix cho GitHub Pages
-  basePath: '/thitheo',
-  assetPrefix: '/thitheo',
+  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
   trailingSlash: true,
   // Chỉ định các thư mục cần được sao chép từ public vào thư mục output
   distDir: 'out',
@@ -19,6 +19,9 @@ const nextConfig = {
   typescript: {
     // Bỏ qua lỗi TypeScript trong quá trình build
     ignoreBuildErrors: true,
+  },
+  experimental: {
+    appDir: true,
   },
   // Tùy chỉnh quá trình build
   webpack: (config, { isServer }) => {
