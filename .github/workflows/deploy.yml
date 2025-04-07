@@ -29,92 +29,88 @@ jobs:
         with:
           node-version: "20"
           
-      - name: Create fresh package.json
+      - name: Update package.json
         run: |
-          cat > package.json << 'EOF'
-{
-  "name": "tho-gio",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@react-google-maps/api": "^2.19.2",
-    "date-fns": "^2.30.0",
-    "next": "14.0.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
-    "react-icons": "^4.12.0",
-    "xlsx": "^0.18.5"
-  },
-  "devDependencies": {
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.10",
-    "@types/node": "^20.10.5",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "14.0.4",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.3.6",
-    "typescript": "^5.3.3"
-  }
-}
-EOF
-          cat package.json
+          echo '{
+            "name": "tho-gio",
+            "version": "0.1.0",
+            "private": true,
+            "scripts": {
+              "dev": "next dev",
+              "build": "next build",
+              "start": "next start",
+              "lint": "next lint"
+            },
+            "dependencies": {
+              "@react-google-maps/api": "^2.19.2",
+              "date-fns": "^2.30.0",
+              "next": "14.0.4",
+              "react": "^18.2.0",
+              "react-dom": "^18.2.0",
+              "react-hot-toast": "^2.4.1",
+              "react-icons": "^4.12.0",
+              "xlsx": "^0.18.5"
+            },
+            "devDependencies": {
+              "@tailwindcss/forms": "^0.5.7",
+              "@tailwindcss/typography": "^0.5.10",
+              "@types/node": "^20.10.5",
+              "@types/react": "^18.2.45",
+              "@types/react-dom": "^18.2.18",
+              "autoprefixer": "^10.4.16",
+              "eslint": "^8.56.0",
+              "eslint-config-next": "14.0.4",
+              "postcss": "^8.4.32",
+              "tailwindcss": "^3.3.6",
+              "typescript": "^5.3.3"
+            }
+          }' > package.json
           
-      - name: Create required config files
+      - name: Create postcss.config.js
+        run: echo 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }' > postcss.config.js
+          
+      - name: Create tailwind.config.js
         run: |
-          echo 'module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } }' > postcss.config.js
+          echo '/** @type {import("tailwindcss").Config} */
+          module.exports = {
+            content: [
+              "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+              "./components/**/*.{js,ts,jsx,tsx,mdx}",
+              "./app/**/*.{js,ts,jsx,tsx,mdx}",
+            ],
+            theme: {
+              extend: {
+                colors: {
+                  primary: "#ef4444",
+                },
+              },
+            },
+            plugins: [
+              require("@tailwindcss/forms"),
+              require("@tailwindcss/typography"),
+            ],
+          }' > tailwind.config.js
           
-          cat > tailwind.config.js << 'EOF'
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: '#ef4444',
-      },
-    },
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
-}
-EOF
+      - name: Create next.config.js
+        run: |
+          echo '/** @type {import("next").NextConfig} */
+          const nextConfig = {
+            output: "export",
+            images: {
+              unoptimized: true,
+            },
+            basePath: "/thitheo",
+            assetPrefix: "/thitheo",
+            trailingSlash: true,
+            eslint: {
+              ignoreDuringBuilds: true,
+            },
+            typescript: {
+              ignoreBuildErrors: true,
+            }
+          }
           
-          cat > next.config.js << 'EOF'
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true,
-  },
-  basePath: '/thitheo',
-  assetPrefix: '/thitheo',
-  trailingSlash: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  }
-}
-
-module.exports = nextConfig
-EOF
+          module.exports = nextConfig' > next.config.js
           
       - name: Install dependencies
         run: |
