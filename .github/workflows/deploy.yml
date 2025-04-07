@@ -28,44 +28,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: 'npm'
           
       - name: Install dependencies
         run: |
-          npm install
-          # Install sharp if needed for image optimization
-          if ! npm list sharp >/dev/null 2>&1; then
-            npm install sharp
-          fi
+          npm ci
+          npm install sharp
           
-      - name: Clean build directory
-        run: |
-          rm -rf .next out
-          mkdir -p out
-          
-      - name: Build application
+      - name: Build
         run: |
           echo "Starting build process..."
-          npm run build || {
-            echo "Build failed, creating fallback content..."
-            mkdir -p out
-            
-            # Create fallback index.html
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tho Giò - Đang bảo trì</title><style>body{font-family:system-ui;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f9fafb}.content{text-align:center;max-width:400px;padding:2rem}h1{color:#1f2937;margin-bottom:1rem}p{color:#4b5563}.divider{width:60px;height:4px;background:#ef4444;margin:1.5rem auto}</style></head><body><div class="content"><h1>Website đang bảo trì</h1><p>Chúng tôi đang nâng cấp hệ thống để mang đến trải nghiệm tốt hơn.</p><div class="divider"></div><p>Vui lòng quay lại sau. Xin cảm ơn!</p></div></body></html>' > out/index.html
-
-            # Create fallback 404.html
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>404 - Không tìm thấy trang</title><style>body{font-family:system-ui;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f9fafb}.content{text-align:center;max-width:400px;padding:2rem}h1{color:#1f2937;margin-bottom:1rem}a{color:#ef4444;text-decoration:none}</style></head><body><div class="content"><h1>404 - Không tìm thấy trang</h1><p><a href="/thitheo/">Quay lại trang chủ</a></p></div></body></html>' > out/404.html
-
-            # Create fallback cart page
-            mkdir -p out/cart
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Giỏ hàng - Tho Giò</title><meta http-equiv="refresh" content="0;url=/thitheo/"><script>window.location.href="/thitheo/";</script></head><body><p>Đang chuyển hướng...</p></body></html>' > out/cart/index.html
-          }
+          npm run build
           
-      - name: Copy static assets
-        run: |
-          cp -r public/* out/ || true
-          mkdir -p out/images/products
-          mkdir -p out/data
-          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

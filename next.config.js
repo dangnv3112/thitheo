@@ -6,8 +6,8 @@ const nextConfig = {
     unoptimized: true,
   },
   // Đặt basePath và assetPrefix cho GitHub Pages
-  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
+  basePath: '/thitheo',
+  assetPrefix: '/thitheo',
   trailingSlash: true,
   // Chỉ định các thư mục cần được sao chép từ public vào thư mục output
   distDir: 'out',
