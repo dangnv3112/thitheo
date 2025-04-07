@@ -5,8 +5,8 @@ const nextConfig = {
     unoptimized: true,
   },
   // Đặt basePath chỉ trong môi trường production, trong development để trống
-  basePath: process.env.NODE_ENV === 'production' ? '/thitheo' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/thitheo/' : '',
+  basePath: '',
+  assetPrefix: '',
   trailingSlash: true,
   // Chỉ định các thư mục cần được sao chép từ public vào thư mục output
   distDir: 'out',
@@ -23,7 +23,12 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     // Tùy chỉnh thêm cho webpack nếu cần
     return config
-  }
+  },
+  // Kiểm tra nếu đang chạy trong GitHub Actions
+  ...(process.env.GITHUB_ACTIONS === 'true' && {
+    // Đảm bảo assets được load đúng trong GitHub Pages
+    assetPrefix: '',
+  }),
 }
 
 module.exports = nextConfig
