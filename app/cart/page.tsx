@@ -15,6 +15,8 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
 import PaymentModal from '../components/PaymentModal';
+import { createUrlPath } from '../config/paths';
+import { getAssetPath } from '../utils/paths';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart } = useCart();
@@ -69,7 +71,7 @@ export default function CartPage() {
               </svg>
             </div>
             <p className="text-lg text-gray-600 mb-4">Giỏ hàng của bạn đang trống</p>
-            <Link href="/products" className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg">
+            <Link href={createUrlPath('/products')} className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg">
               Tiếp tục mua sắm
             </Link>
           </div>
@@ -87,14 +89,14 @@ export default function CartPage() {
                       <div className="w-full sm:w-24 h-24 mb-4 sm:mb-0 flex-shrink-0">
                         <div className="relative w-24 h-24 mx-auto">
                           <Image
-                            src={item.image || '/images/products/product-placeholder.svg'}
+                            src={getAssetPath(item.image || '/images/products/product-placeholder.svg')}
                             alt={item.name}
                             fill
                             sizes="96px"
                             className="object-cover rounded-md"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.src = '/images/products/product-placeholder.svg';
+                              target.src = getAssetPath('/images/products/product-placeholder.svg');
                             }}
                           />
                         </div>
@@ -167,7 +169,7 @@ export default function CartPage() {
                   Đặt Hàng
                 </button>
                 
-                <Link href="/products" className="w-full block text-center mt-4 text-blue-600">
+                <Link href={createUrlPath('/products')} className="w-full block text-center mt-4 text-blue-600">
                   Tiếp tục mua sắm
                 </Link>
               </div>

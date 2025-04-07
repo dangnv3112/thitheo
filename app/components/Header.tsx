@@ -7,6 +7,7 @@ import { FaShoppingCart, FaUserAlt, FaBars, FaTimes, FaSearch } from 'react-icon
 import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/navigation';
 import { getAssetPath } from '../utils/paths';
+import { createUrlPath } from '../config/paths';
 
 // Interface for search result items
 interface SearchResult {
@@ -24,7 +25,7 @@ function CartIcon() {
   }, []);
   
   return (
-    <Link href="/cart" className="text-gray-700 hover:text-red-600 relative" key="cart-icon">
+    <Link href={createUrlPath('/cart')} className="text-gray-700 hover:text-red-600 relative" key="cart-icon">
       <FaShoppingCart size={24} />
       {mounted && (
         <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -76,7 +77,7 @@ export default function Header() {
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(createUrlPath(`/search?q=${encodeURIComponent(searchQuery.trim())}`));
       setShowSearchResults(false);
     }
   };
@@ -86,7 +87,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href={createUrlPath('/')} className="flex items-center">
             <div className="relative h-12 w-32">
               <img
                 src={getAssetPath('/images/tho-gio-logo.svg')}
@@ -98,19 +99,19 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-red-600 font-medium" key="home">
+            <Link href={createUrlPath('/')} className="text-gray-700 hover:text-red-600 font-medium" key="home">
               Trang Chủ
             </Link>
-            <Link href="/products" className="text-gray-700 hover:text-red-600 font-medium" key="products">
+            <Link href={createUrlPath('/products')} className="text-gray-700 hover:text-red-600 font-medium" key="products">
               Sản Phẩm
             </Link>
-            <Link href="/promotions" className="text-gray-700 hover:text-red-600 font-medium" key="promotions">
+            <Link href={createUrlPath('/promotions')} className="text-gray-700 hover:text-red-600 font-medium" key="promotions">
               Khuyến Mãi
             </Link>
-            <Link href="/about" className="text-gray-700 hover:text-red-600 font-medium" key="about">
+            <Link href={createUrlPath('/about')} className="text-gray-700 hover:text-red-600 font-medium" key="about">
               Về Chúng Tôi
             </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-red-600 font-medium" key="contact">
+            <Link href={createUrlPath('/contact')} className="text-gray-700 hover:text-red-600 font-medium" key="contact">
               Liên Hệ
             </Link>
           </nav>
@@ -118,7 +119,7 @@ export default function Header() {
           {/* User Actions */}
           <div className="flex items-center space-x-4">
             <CartIcon />
-            <Link href="/account" className="text-gray-700 hover:text-red-600" key="account-icon">
+            <Link href={createUrlPath('/account')} className="text-gray-700 hover:text-red-600" key="account-icon">
               <FaUserAlt size={22} />
             </Link>
             <button 
@@ -136,7 +137,7 @@ export default function Header() {
         <div className="md:hidden bg-white py-4 px-4 shadow-inner">
           <nav className="flex flex-col space-y-4">
             <Link 
-              href="/" 
+              href={createUrlPath('/')} 
               className="text-gray-700 hover:text-red-600 font-medium"
               onClick={() => setMobileMenuOpen(false)}
               key="mobile-home"
@@ -144,7 +145,7 @@ export default function Header() {
               Trang Chủ
             </Link>
             <Link 
-              href="/products" 
+              href={createUrlPath('/products')} 
               className="text-gray-700 hover:text-red-600 font-medium"
               onClick={() => setMobileMenuOpen(false)}
               key="mobile-products"
@@ -152,7 +153,7 @@ export default function Header() {
               Sản Phẩm
             </Link>
             <Link 
-              href="/promotions" 
+              href={createUrlPath('/promotions')} 
               className="text-gray-700 hover:text-red-600 font-medium"
               onClick={() => setMobileMenuOpen(false)}
               key="mobile-promotions"
@@ -160,7 +161,7 @@ export default function Header() {
               Khuyến Mãi
             </Link>
             <Link 
-              href="/about" 
+              href={createUrlPath('/about')} 
               className="text-gray-700 hover:text-red-600 font-medium"
               onClick={() => setMobileMenuOpen(false)}
               key="mobile-about"
@@ -168,7 +169,7 @@ export default function Header() {
               Về Chúng Tôi
             </Link>
             <Link 
-              href="/contact" 
+              href={createUrlPath('/contact')} 
               className="text-gray-700 hover:text-red-600 font-medium"
               onClick={() => setMobileMenuOpen(false)}
               key="mobile-contact"
