@@ -19,8 +19,8 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Thỏ Giò - Đặc sản Huế</title>
-        <meta name="description" content="Thỏ Giò - Đặc sản Huế chất lượng cao, giao hàng tận nơi" />
+        <title>Tho Giò - Thịt Heo Sạch, Tươi Ngon</title>
+        <meta name="description" content="Tho Giò - Chuyên cung cấp thịt heo sạch, tươi ngon, chất lượng cao, giao hàng tận nơi" />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
